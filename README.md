@@ -1,2 +1,2 @@
-# peta-digital
-Menyajikan informasi dalam bentuk peta digital yang berisi tentang profil, persebaran potensi, dan lokasi desa mitra.
+# sistem-informasi alat berat
+Menyajikan informasi terkait perhitungan alat berat

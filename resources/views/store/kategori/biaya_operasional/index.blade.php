@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('title')
-  Desa
+Kategori Biaya Operasional
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -8,26 +8,31 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Tentang
+          <h4 class="card-title"> Daftar Kategori Biaya Operasional
+            <button type="button" class="btn btn-primary btn-rounded float-right mb-3" @click="createModal()">
+            <i class="fas fa-plus-circle"></i> Tambah Kategori Biaya Operasional</button>
           </h4>
           
           <div class="table-responsive">
             <table id="table" class="table table-striped table-bordered no-wrap">
               <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Deskripsi</th>
-                  <th>Aksi</th>
-                </tr>
+                  <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Aksi</th>
+                  </tr>
               </thead>
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
-                  <td>@{{ item.content}}</td>
+                  <td>@{{ item.email}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i
                       class="far fa-edit"></i></a>
+                    <a href="javascript:void(0);" @click="deleteData(item.id)" class="text-danger"
+                      data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i
+                      class="far fa-trash-alt"></i></a>
                   </td>
                 </tr>
               </tbody>
@@ -44,87 +49,83 @@
   <div class="modal-dialog modal-lg" id="modal">
     <div class="modal-content">
       <div class="modal-header ">
+        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Kategori</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
             <div class="form-row">
-              <label class="col-lg-2" for="content"> Deskripsi </label>
+              <label class="col-lg-2" for="name"> Nama </label>
               <div class="form-group col-md-8">
-                <input v-model="form.content" id="content" type="text-area" min=0 placeholder="Masukkan deskripsi"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('content') }">
-                <has-error :form="form" field="content"></has-error>
+                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama kategori"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                <has-error :form="form" field="name"></has-error>
               </div>
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-light" data-dismiss="modal">Batal</button>
+            <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
             <button v-show="editMode" type="submit" class="btn btn-success">Ubah</button>
           </div>
       </form>
     </div>
   </div>
 </div>
-
 @endsection
-
 
 @push('script')
 <script>
   var app = new Vue({
     el: '#app',
     data: {
-      mainData: [],
+      mainData: [
+      ],
       form: new Form({
         id: '',
-        content: '',
+        name: ''
       }),
-      editMode:false,
+      editMode: false,
     },
     mounted() {
       this.refreshData()
     },
     methods: {
+      createModal(){
+        this.editMode = false;
+        this.form.reset();
+        this.form.clear();
+        $('#modal').modal('show');
+      },
       editModal(data){
         this.editMode = true;
-        this.form.fill(data);
+        this.form.fill(data)
         this.form.clear();
         $('#modal').modal('show');
       },
       storeData(){
-
       },
       updateData(){
-        url = "{{ route('about.update', ':id') }}".replace(':id', this.form.id)
-        this.form.put(url)
-        .then(response => {
-          $('#modal').modal('hide');
-          Swal.fire(
-            'Berhasil',
-            'Data tentang berhasil diubah',
-            'success'
-          )
-          this.refreshData()
-        })
-        .catch(e => {
-            e.response.status != 422 ? console.log(e) : '';
-        })
+      },
+      deleteData(id){
+        Swal.fire({
+          title: 'Apakah anda yakin?',
+          text: "Anda tidak dapat mengembalikan ini",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Ya, Hapus',
+          cancelButtonText: 'Batal'
+      }).then((result) => {
+          if (result.value) {
+            console.log('delete')
+          }
+      })
       },
       refreshData() {
-        axios.get("{{ route('about.list') }}")
-        .then(response => {
-          console.log('res',response)
-          $('#table').DataTable().destroy()
-          this.mainData = response.data
-          this.$nextTick(function () {
-              $('#table').DataTable();
-          })
-        })
-        .catch(e => {
-          e.response.status != 422 ? console.log(e) : '';
-        })
       }
     },
   })
- </script>
+</script>
 @endpush

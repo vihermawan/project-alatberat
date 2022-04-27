@@ -45,6 +45,41 @@
           <span class="hide-menu">
               Biaya sewa</span></a>
         </li>
+        <li class="nav-small-cap"><span class="hide-menu">Master</span></li>
+        <li class="sidebar-item"> 
+          <a class="sidebar-link sidebar-link" 
+          href="{{url('/admin')}}"
+          aria-expanded="false">
+          <i class="fas fa-users"></i>
+          <span class="hide-menu">
+              Alat Berat</span></a>
+        </li>
+        <li class="sidebar-item"> <a class="sidebar-link has-arrow" href="javascript:void(0)"
+          aria-expanded="false"><i class="fas fa-bars"></i><span
+          class="hide-menu">Kategori</a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item"><a  href="{{url('/kategori-biaya-operasional')}}" class="sidebar-link"><span
+              class="hide-menu"> Biaya Operasional</span></a>
+            </li>
+            <li class="sidebar-item"><a  href="{{url('/kategori-biaya-sewa')}}" class="sidebar-link"><span
+              class="hide-menu"> Biaya Sewa</span></a>
+            </li>
+            <li class="sidebar-item"><a  href="{{url('/kategori-produktivitas')}}" class="sidebar-link"><span
+              class="hide-menu">Produktivitas</span></a></li>
+          </ul>
+        </li>
+        <li class="sidebar-item"> <a class="sidebar-link has-arrow"  href="{{url('/admin')}}"
+          aria-expanded="false"><i class="fas fa-cube"></i><span
+          class="hide-menu">Parameter</a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item"><a  href="{{url('/parameter-produktivitas')}}" class="sidebar-link"><span
+              class="hide-menu"> Produktivitas</span></a>
+            </li>
+            <li class="sidebar-item"><a  href="{{url('/parameter-kebutuhan-alat')}}" class="sidebar-link"><span
+              class="hide-menu"> Kebutuhan Alat</span></a>
+            </li>
+          </ul>
+        </li>
         <li class="sidebar-item"> 
           <a class="sidebar-link sidebar-link" 
           href="{{url('/admin')}}"

@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('title')
-Kebutuhan Alat
+Kategori Produktivitas
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -8,9 +8,9 @@ Kebutuhan Alat
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title"> Daftar Kebutuhan Alat
+          <h4 class="card-title"> Daftar Kategori Produktivitas
             <button type="button" class="btn btn-primary btn-rounded float-right mb-3" @click="createModal()">
-            <i class="fas fa-plus-circle"></i> Tambah Kebutuhan Alat</button>
+            <i class="fas fa-plus-circle"></i> Tambah Kategori Produktivitas</button>
           </h4>
           
           <div class="table-responsive">
@@ -18,7 +18,7 @@ Kebutuhan Alat
               <thead>
                   <tr>
                     <th>No</th>
-                    <th>Email</th>
+                    <th>Nama</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
@@ -49,26 +49,18 @@ Kebutuhan Alat
   <div class="modal-dialog modal-lg" id="modal">
     <div class="modal-content">
       <div class="modal-header ">
-        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Admin</h4>
+        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Kategori</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
             <div class="form-row">
-              <label class="col-lg-2" for="email"> Email </label>
+              <label class="col-lg-2" for="name"> Nama </label>
               <div class="form-group col-md-8">
-                <input v-model="form.email" id="email" type="text" min=0 placeholder="Masukkan Email"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                <has-error :form="form" field="email"></has-error>
-              </div>
-            </div>
-            <div class="form-row" v-show="!editMode">
-              <label class="col-lg-2" for="password"> Password </label>
-              <div class="form-group col-md-8">
-                <input v-model="form.password" id="password" type="password" min=0 placeholder="Masukkan password"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                <has-error :form="form" field="password"></has-error>
+                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama kategori"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                <has-error :form="form" field="name"></has-error>
               </div>
             </div>
           <div class="modal-footer">
@@ -91,8 +83,7 @@ Kebutuhan Alat
       ],
       form: new Form({
         id: '',
-        email: '',
-        password: '',
+        name: '',
       }),
       editMode: false,
     },

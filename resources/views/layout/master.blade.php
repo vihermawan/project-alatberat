@@ -127,7 +127,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer text-center text-muted">
-         Peta Digital ⓒ 2022 
+         Sistem Informasi Alat Berat ⓒ 2022 
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->

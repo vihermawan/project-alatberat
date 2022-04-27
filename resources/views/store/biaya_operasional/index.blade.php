@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('title')
-Admin
+Biaya Operasional
 @endsection
 @section('content')
 <div class="container-fluid">
