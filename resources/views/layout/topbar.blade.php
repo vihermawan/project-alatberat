@@ -13,7 +13,7 @@
               <!-- Logo text -->
               <span class="logo-text">
                   <!-- dark Logo text -->
-                  <img src="{{url('/')}}/template/assets/images/PetaDigital.png" />
+                  <img src="{{url('/')}}/template/assets/images/sirat.png" />
               </span>
           </a>
       </div>

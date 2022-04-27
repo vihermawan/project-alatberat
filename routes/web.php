@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Store\AdminController;
-use App\Http\Controllers\Store\DesaController;
-use App\Http\Controllers\Store\TentangController;
+use App\Http\Controllers\Store\BiayaOperasionalController;
+use App\Http\Controllers\Store\BiayaSewaController;
+use App\Http\Controllers\Store\ProduktivitasController;
+use App\Http\Controllers\Store\KebutuhanAlatController;
+use App\Http\Controllers\Store\RekapitulasiController;
 use App\Http\Controllers\Auth\LoginController;
 
 
@@ -27,8 +30,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/admin',[AdminController::class, 'index']);
-Route::get('/desa',[DesaController::class, 'index'])->name('village.view');
-Route::get('/tentang',[TentangController::class, 'index']);
+Route::get('/rekapitulasi',[RekapitulasiController::class, 'index']);
+Route::get('/biaya-operasional',[BiayaOperasionalController::class, 'index']);
+Route::get('/biaya-sewa',[BiayaSewaController::class, 'index']);
+Route::get('/produktivitas',[ProduktivitasController::class, 'index']);
+Route::get('/kebutuhan-alat',[KebutuhanAlatController::class, 'index']);
 
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');
@@ -40,16 +46,6 @@ Route::put('/update-admin/{id}',[AdminController::class, 'update'])->name('admin
 Route::get('/about',[TentangController::class, 'listAbout'])->name('about.list');
 Route::put('/update-about/{id}',[TentangController::class, 'update'])->name('about.update');
 
-
-/*desa */
-Route::get('/villages',[DesaController::class, 'listVillages'])->name('village.list');
-Route::get('/desa/tambah',[DesaController::class, 'create'])->name('village.create');
-Route::get('/desa/edit',[DesaController::class, 'edit'])->name('village.edit');
-Route::delete('/delete-village/{id}',[DesaController::class, 'destroy'])->name('village.destroy');
-Route::post('/create-village',[DesaController::class, 'store'])->name('village.store');
-Route::get('/detail-village/{id}',[DesaController::class, 'detail'])->name('village.detail');
-Route::post('/update-village/{id}',[DesaController::class, 'update'])->name('village.update');
-
 Route::get('/home', function () {
-  return redirect('/admin');
+  return redirect('/rekapitulasi');
 });

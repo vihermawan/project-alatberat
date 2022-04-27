@@ -11,7 +11,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Favicon icon -->
   <link rel="icon" type="image/png" sizes="16x16" href="{{asset('template/assets/images/APOTECH1.png')}}">
-  <title>@yield('title') | Sistem Informasi Peta Digitalt</title>
+  <title>@yield('title') | Sistem Informasi Alat Berat</title>
   <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
   <!-- Custom CSS -->
   <link href="{{asset('template/assets/extra-libs/c3/c3.min.css')}}" rel="stylesheet">
@@ -47,7 +47,6 @@
       max-height: 250px;
       overflow-x: hidden;
     }
-    #mapid { height: 300px; }
   </style>
 </head>
 
@@ -138,9 +137,6 @@
 
     <script src="{{asset('template/js/app.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-    crossorigin=""></script>
     @stack('script')
 
     <!-- apps -->
