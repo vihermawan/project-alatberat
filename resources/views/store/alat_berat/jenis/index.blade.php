@@ -19,13 +19,15 @@ Jenis Alat Berat
                   <tr>
                     <th>No</th>
                     <th>Nama</th>
+                    <th>Proyek</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
-                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.nama}}</td>
+                  <td>@{{ item.nama_proyek}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i
@@ -56,11 +58,23 @@ Jenis Alat Berat
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
             <div class="form-row">
-              <label class="col-lg-2" for="name"> Nama </label>
+              <label class="col-lg-2" for="id_proyek">Proyek</label>
               <div class="form-group col-md-8">
-                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama alat berat"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                <has-error :form="form" field="name"></has-error>
+                  <select v-model="form.id_proyek" id="id_proyek" onchange="selectTrigger()" placeholder="Pilih Proyek"
+                      style="width: 100%" class="form-control custom-select">
+                      <option disabled value="">- Pilih Proyek -</option>
+                      <option v-for="item in allProyek" :value="item.id">
+                          @{{  item.nama }}</option>
+                  </select>
+                  <has-error :form="form" field="id_proyek"></has-error>
+              </div>
+          </div>
+            <div class="form-row">
+              <label class="col-lg-2" for="nama"> Nama </label>
+              <div class="form-group col-md-8">
+                <input v-model="form.nama" id="nama" type="text" min=0 placeholder="Masukkan nama jenis alat berat"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('nama') }">
+                <has-error :form="form" field="nama"></has-error>
               </div>
             </div>
           <div class="modal-footer">
@@ -76,6 +90,10 @@ Jenis Alat Berat
 
 @push('script')
 <script>
+  function selectTrigger() {
+      app.inputSelect()
+  }
+
   var app = new Vue({
     el: '#app',
     data: {
@@ -83,12 +101,17 @@ Jenis Alat Berat
       ],
       form: new Form({
         id: '',
-        name: '',
+        id_proyek: '',
+        nama: '',
       }),
+      allProyek : @json($allProyek),
       editMode: false,
     },
     mounted() {
       this.refreshData()
+      $('#id_proyek').select2({
+          placeholder: "Pilih Proyek"
+      });
     },
     methods: {
       createModal(){
@@ -104,8 +127,36 @@ Jenis Alat Berat
         $('#modal').modal('show');
       },
       storeData(){
+        this.form.post("{{ route('jenisAlat.store') }}")
+        .then(response => {
+          console.log('res',response)
+          $('#modal').modal('hide');
+          Swal.fire(
+              'Berhasil',
+              'Data jenis alat berhasil ditambahkan',
+              'success'
+          )
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       updateData(){
+        url = "{{ route('jenisAlat.update', ':id') }}".replace(':id', this.form.id)
+        this.form.put(url)
+        .then(response => {
+          $('#modal').modal('hide');
+          Swal.fire(
+            'Berhasil',
+            'Data jenis alat berhasil diubah',
+            'success'
+          )
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       deleteData(id){
         Swal.fire({
@@ -119,11 +170,38 @@ Jenis Alat Berat
           cancelButtonText: 'Batal'
       }).then((result) => {
           if (result.value) {
-            console.log('delete')
+            url = "{{ route('jenisAlat.destroy', ':id') }}".replace(':id', id)
+            this.form.delete(url)
+            .then(response => {
+              console.log('res',response)
+              Swal.fire(
+                'Terhapus',
+                'Data jenis alat telah dihapus',
+                'success'
+              )
+              this.refreshData()
+            })
+            .catch(e => {
+                e.response.status != 422 ? console.log(e) : '';
+            })
           }
       })
       },
       refreshData() {
+        axios.get("{{ route('jenisAlat.list') }}")
+        .then(response => {
+          $('#table').DataTable().destroy()
+          this.mainData = response.data
+          this.$nextTick(function () {
+              $('#table').DataTable();
+          })
+        })
+        .catch(e => {
+          e.response.status != 422 ? console.log(e) : '';
+        })
+      },
+      inputSelect() {
+        this.form.id_proyek =  $("#id_proyek").val()
       }
     },
   })

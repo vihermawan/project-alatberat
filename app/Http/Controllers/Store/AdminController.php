@@ -55,7 +55,6 @@ class AdminController extends Controller
     public function destroy($id)
     {
        return User::find($id)->delete();
-
     }
 
 }

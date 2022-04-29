@@ -44,6 +44,23 @@ Route::get('/volume-pekerjaan',[VolumeController::class, 'index']);
 Route::get('/proyek',[ProyekController::class, 'index']);
 
 
+/*proyek */
+Route::post('/create-proyek',[ProyekController::class, 'store'])->name('proyek.store');
+Route::get('/all-proyek',[ProyekController::class, 'listProyek'])->name('proyek.list');
+Route::delete('/delete-proyek/{id}',[ProyekController::class, 'destroy'])->name('proyek.destroy');
+Route::put('/update-proyek/{id}',[ProyekController::class, 'update'])->name('proyek.update');
+
+/*jenis alat */
+Route::post('/create-jenis-alat',[AlatBeratController::class, 'storeJenisAlat'])->name('jenisAlat.store');
+Route::get('/all-jenis-alat',[AlatBeratController::class, 'listJenisAlat'])->name('jenisAlat.list');
+Route::delete('/delete-jenis-alat/{id}',[AlatBeratController::class, 'destroyJenisAlat'])->name('jenisAlat.destroy');
+Route::put('/update-jenis-alat/{id}',[AlatBeratController::class, 'updateJenisAlat'])->name('jenisAlat.update');
+
+/*tipe alat */
+Route::post('/create-tipe-alat',[AlatBeratController::class, 'storeTipeAlat'])->name('tipeAlat.store');
+Route::get('/all-tipe-alat',[AlatBeratController::class, 'listTipeAlat'])->name('tipeAlat.list');
+Route::delete('/delete-tipe-alat/{id}',[AlatBeratController::class, 'destroyTipeAlat'])->name('tipeAlat.destroy');
+Route::put('/update-tipe-alat/{id}',[AlatBeratController::class, 'updateTipeAlat'])->name('tipeAlat.update');
 
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');

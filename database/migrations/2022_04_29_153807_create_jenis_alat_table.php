@@ -15,6 +15,7 @@ class CreateJenisAlatTable extends Migration
     {
         Schema::create('jenis_alat', function (Blueprint $table) {
             $table->bigInteger('id', true);
+            $table->integer('id_proyek')->nullable();
             $table->string('nama')->nullable();
             $table->timestamps();
         });
