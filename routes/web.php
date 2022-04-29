@@ -9,11 +9,8 @@ use App\Http\Controllers\Store\ProduktivitasController;
 use App\Http\Controllers\Store\KebutuhanAlatController;
 use App\Http\Controllers\Store\RekapitulasiController;
 use App\Http\Controllers\Store\AlatBeratController;
-use App\Http\Controllers\Store\KategoriBiayaOperasionalController;
-use App\Http\Controllers\Store\KategoriBiayaSewaController;
-use App\Http\Controllers\Store\KategoriProduktivitasController;
-use App\Http\Controllers\Store\ParameterProduktivitasController;
-use App\Http\Controllers\Store\ParameterKebutuhanAlatController;
+use App\Http\Controllers\Store\VolumeController;
+use App\Http\Controllers\Store\ProyekController;
 use App\Http\Controllers\Auth\LoginController;
 
 
@@ -41,12 +38,10 @@ Route::get('/biaya-operasional',[BiayaOperasionalController::class, 'index']);
 Route::get('/biaya-sewa',[BiayaSewaController::class, 'index']);
 Route::get('/produktivitas',[ProduktivitasController::class, 'index']);
 Route::get('/kebutuhan-alat',[KebutuhanAlatController::class, 'index']);
-Route::get('/alat-berat',[AlatBeratController::class, 'index']);
-Route::get('/kategori-biaya-operasional',[KategoriBiayaOperasionalController::class, 'index']);
-Route::get('/kategori-biaya-sewa',[KategoriBiayaSewaController::class, 'index']);
-Route::get('/kategori-produktivitas',[KategoriProduktivitasController::class, 'index']);
-Route::get('/parameter-produktivitas',[ParameterProduktivitasController::class, 'index']);
-Route::get('/parameter-kebutuhan-alat',[ParameterKebutuhanAlatController::class, 'index']);
+Route::get('/tipe-alat-berat',[AlatBeratController::class, 'indexTipe']);
+Route::get('/jenis-alat-berat',[AlatBeratController::class, 'indexJenis']);
+Route::get('/volume-pekerjaan',[VolumeController::class, 'index']);
+Route::get('/proyek',[ProyekController::class, 'index']);
 
 
 

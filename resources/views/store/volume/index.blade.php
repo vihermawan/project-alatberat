@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('title')
-Parameter Kebutuhan Alat
+Volume Pekerjaan
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -8,9 +8,9 @@ Parameter Kebutuhan Alat
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title"> Daftar Parameter Kebutuhan Alat
+          <h4 class="card-title"> Daftar Volume Pekerjaan
             <button type="button" class="btn btn-primary btn-rounded float-right mb-3" @click="createModal()">
-            <i class="fas fa-plus-circle"></i> Tambah Parameter Kebutuhan Alat</button>
+            <i class="fas fa-plus-circle"></i> Tambah Volume Pekerjaan</button>
           </h4>
           
           <div class="table-responsive">
@@ -49,7 +49,7 @@ Parameter Kebutuhan Alat
   <div class="modal-dialog modal-lg" id="modal">
     <div class="modal-content">
       <div class="modal-header ">
-        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Parameter</h4>
+        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Volume Pekerjaan</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
@@ -58,7 +58,7 @@ Parameter Kebutuhan Alat
             <div class="form-row">
               <label class="col-lg-2" for="name"> Nama </label>
               <div class="form-group col-md-8">
-                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama parameter"
+                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama Volume Pekerjaan"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                 <has-error :form="form" field="name"></has-error>
               </div>
@@ -84,7 +84,6 @@ Parameter Kebutuhan Alat
       form: new Form({
         id: '',
         name: '',
-        password: '',
       }),
       editMode: false,
     },

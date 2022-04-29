@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('title')
-Kategori Biaya Operasional
+Jenis Alat Berat
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -8,9 +8,9 @@ Kategori Biaya Operasional
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title"> Daftar Kategori Biaya Operasional
+          <h4 class="card-title"> Daftar Jenis Alat Berat
             <button type="button" class="btn btn-primary btn-rounded float-right mb-3" @click="createModal()">
-            <i class="fas fa-plus-circle"></i> Tambah Kategori Biaya Operasional</button>
+            <i class="fas fa-plus-circle"></i> Tambah Jenis Alat Berat</button>
           </h4>
           
           <div class="table-responsive">
@@ -49,7 +49,7 @@ Kategori Biaya Operasional
   <div class="modal-dialog modal-lg" id="modal">
     <div class="modal-content">
       <div class="modal-header ">
-        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Kategori</h4>
+        <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Jenis Alat Berat</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
@@ -58,7 +58,7 @@ Kategori Biaya Operasional
             <div class="form-row">
               <label class="col-lg-2" for="name"> Nama </label>
               <div class="form-group col-md-8">
-                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama kategori"
+                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama alat berat"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                 <has-error :form="form" field="name"></has-error>
               </div>
@@ -83,7 +83,7 @@ Kategori Biaya Operasional
       ],
       form: new Form({
         id: '',
-        name: ''
+        name: '',
       }),
       editMode: false,
     },

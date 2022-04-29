@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class KategoriProduktivitasController extends Controller
+class ProyekController extends Controller
 {
     public function __construct()
     {
@@ -13,6 +13,6 @@ class KategoriProduktivitasController extends Controller
     }
     
     public function index(){
-        return view('store.kategori.produktivitas.index');
+        return view('store.proyek.index');
     }
 }

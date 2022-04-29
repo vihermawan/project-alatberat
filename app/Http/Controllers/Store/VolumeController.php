@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class KebutuhanAlatController extends Controller
+class VolumeController extends Controller
 {
     public function __construct()
     {
@@ -13,6 +13,6 @@ class KebutuhanAlatController extends Controller
     }
     
     public function index(){
-        return view('store.kebutuhan_alat.index');
+        return view('store.volume.index');
     }
 }

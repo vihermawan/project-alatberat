@@ -12,7 +12,11 @@ class AlatBeratController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(){
-        return view('store.alat_berat.index');
+    public function indexTipe(){
+        return view('store.alat_berat.tipe.index');
+    }
+
+    public function indexJenis(){
+        return view('store.alat_berat.jenis.index');
     }
 }
