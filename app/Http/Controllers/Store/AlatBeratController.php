@@ -28,9 +28,7 @@ class AlatBeratController extends Controller
     }
 
     public function filterJenisAlat($id){
-        $allJenisAlat = JenisAlat::select('jenis_alat.*', 'proyek.nama as nama_proyek','proyek.id')
-                        ->leftJoin('proyek', 'jenis_alat.id_proyek', '=', 'proyek.id')
-                        ->where('jenis_alat.id_proyek','=',$id)
+        $allJenisAlat = JenisAlat::where('jenis_alat.id_proyek','=',$id)
                         ->get();
         return $allJenisAlat;
     }
@@ -77,9 +75,7 @@ class AlatBeratController extends Controller
     }
 
     public function filterTipeAlat($id){
-        $allTipeAlat = TipeAlat::select('tipe_alat.*', 'jenis_alat.nama as nama_jenis_alat','jenis_alat.id')
-                    ->leftJoin('jenis_alat', 'tipe_alat.id_jenis_alat', '=', 'jenis_alat.id')
-                    ->where('tipe_alat.id_jenis_alat','=',$id)
+        $allTipeAlat = TipeAlat::where('tipe_alat.id_jenis_alat','=',$id)
                     ->get();
         return $allTipeAlat;
     }

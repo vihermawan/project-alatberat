@@ -70,6 +70,12 @@ Route::get('/all-volume-pekerjaan',[VolumeController::class, 'listvolumePekerjaa
 Route::delete('/delete-volume-pekerjaan/{id}',[VolumeController::class, 'destroy'])->name('volumePekerjaan.destroy');
 Route::put('/update-volume-pekerjaan/{id}',[VolumeController::class, 'update'])->name('volumePekerjaan.update');
 
+/*produktivitas */
+Route::post('/create-produktivitas',[ProduktivitasController::class, 'store'])->name('produktivitas.store');
+Route::get('/all-produktivitas',[ProduktivitasController::class, 'listProduktivitas'])->name('produktivitas.list');
+Route::delete('/delete-produktivitas/{id}',[ProduktivitasController::class, 'destroy'])->name('produktivitas.destroy');
+Route::put('/update-produktivitas/{id}',[ProduktivitasController::class, 'update'])->name('produktivitas.update');
+
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');
 Route::get('/admins',[AdminController::class, 'listAdmin'])->name('admin.list');

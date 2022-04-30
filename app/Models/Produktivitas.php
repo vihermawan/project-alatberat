@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Produktivita extends Model
+class Produktivitas extends Model
 {
 	protected $table = 'produktivitas';
 
