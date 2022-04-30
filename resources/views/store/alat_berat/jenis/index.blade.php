@@ -4,6 +4,35 @@ Jenis Alat Berat
 @endsection
 @section('content')
 <div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">
+        Pilih Proyek
+      </h4>
+      <form @submit.prevent="filterData()" @keydown="form.onKeydown($event)" id="formPasien">
+          <div class="row my-4">
+              <div class="col md-12">
+                <div class="form-row">
+                  <label class="col-lg-2" for="id_proyek">Proyek</label>
+                  <div class="form-group col-md-10">
+                    <select v-model="form.id_proyek" id="id_proyek" onchange="selectTrigger()" placeholder="Pilih Proyek"
+                        style="width: 100%" class="form-control custom-select">
+                        <option disabled value="">- Pilih Proyek -</option>
+                        <option v-for="item in allProyek" :value="item.id">
+                            @{{item.nama }}</option>
+                    </select>
+                    <has-error :form="form" field="id_proyek"></has-error>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-reset" data-dismiss="modal" @click="resetData()">Reset</button>
+              <button type="submit" class="btn btn-search">Filter</button>
+          </div>
+      </form>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -109,9 +138,6 @@ Jenis Alat Berat
     },
     mounted() {
       this.refreshData()
-      $('#id_proyek').select2({
-          placeholder: "Pilih Proyek"
-      });
     },
     methods: {
       createModal(){
@@ -202,6 +228,24 @@ Jenis Alat Berat
       },
       inputSelect() {
         this.form.id_proyek =  $("#id_proyek").val()
+      },
+      filterData(){
+        url = "{{ route('jenisAlat.filter', ':id') }}".replace(':id', this.form.id_proyek)
+        this.form.get(url)
+        .then(response => {
+          $('#table').DataTable().destroy()
+          this.mainData = response.data
+          this.$nextTick(function () {
+              $('#table').DataTable();
+          })
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
+      },
+      resetData(){
+        this.form.id_proyek= '';
+        this.refreshData()
       }
     },
   })

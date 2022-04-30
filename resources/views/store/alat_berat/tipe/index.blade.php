@@ -4,6 +4,37 @@ Tipe Alat Berat
 @endsection
 @section('content')
 <div class="container-fluid">
+
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">
+        Pilih Jenis Alat
+      </h4>
+      <form @submit.prevent="filterData()" @keydown="form.onKeydown($event)" id="formPasien">
+          <div class="row my-4">
+              <div class="col md-12">
+                <div class="form-row">
+                  <label class="col-lg-2" for="id_jenis_alat">Jenis Alat</label>
+                  <div class="form-group col-md-10">
+                    <select v-model="form.id_jenis_alat" id="id_jenis_alat" onchange="selectTrigger()" placeholder="Pilih Proyek"
+                        style="width: 100%" class="form-control custom-select">
+                        <option disabled value="">- Pilih Jenis Alat -</option>
+                        <option v-for="item in allJenisAlat" :value="item.id">
+                            @{{item.nama}}</option>
+                    </select>
+                    <has-error :form="form" field="id_jenis_alat"></has-error>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-reset" data-dismiss="modal" @click="resetData()">Reset</button>
+              <button type="submit" class="btn btn-search">Filter</button>
+          </div>
+      </form>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -197,7 +228,25 @@ Tipe Alat Berat
         })
       },
       inputSelect() {
-        this.form.id_jenis_alat =  $("#id_jenis_alat").val()
+        this.form.id_tipe_alat =  $("#id_tipe_alat").val()
+      },
+      filterData(){
+        url = "{{ route('tipeAlat.filter', ':id') }}".replace(':id', this.form.id_jenis_alat)
+        this.form.get(url)
+        .then(response => {
+          $('#table').DataTable().destroy()
+          this.mainData = response.data
+          this.$nextTick(function () {
+              $('#table').DataTable();
+          })
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
+      },
+      resetData(){
+        this.form.id_jenis_alat= '';
+        this.refreshData()
       }
     },
   })
