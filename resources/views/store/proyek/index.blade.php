@@ -20,16 +20,7 @@ Proyek
                     <th>No</th>
                     <th>Nama</th>
                     <th>Lokasi</th>
-                    <th>Sumber Dana</th>
                     <th>Dana</th>
-                    <th>Retensi</th>
-                    <th>Jenis Kontrak</th>
-                    <th>Jaminan Pelaksana</th>
-                    <th>Konsultan Perencana</th>
-                    <th>Konsultan Supervisi</th>
-                    <th>Pemilik Proyek</th>
-                    <th>Masa Pelaksanaan</th>
-                    <th>Masa Pemliharaan</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
@@ -38,16 +29,7 @@ Proyek
                   <td>@{{ index+1 }}</td>
                   <td>@{{ item.nama}}</td>
                   <td>@{{ item.lokasi}}</td>
-                  <td>@{{ item.sumber_dana}}</td>
                   <td>@{{ item.budget}}</td>
-                  <td>@{{ item.retensi}}</td>
-                  <td>@{{ item.jenis_kontrak}}</td>
-                  <td>@{{ item.jaminan_pelaksana}}</td>
-                  <td>@{{ item.konsultan_perencana}}</td>
-                  <td>@{{ item.konsultan_supervisi}}</td>
-                  <td>@{{ item.pemilik_proyek}}</td>
-                  <td>@{{ item.masa_pelaksanaan}}</td>
-                  <td>@{{ item.masa_pemeliharaan}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i

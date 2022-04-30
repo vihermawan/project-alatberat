@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\VolumePekerjaan;
 
 class VolumeController extends Controller
 {
@@ -14,5 +15,41 @@ class VolumeController extends Controller
     
     public function index(){
         return view('store.volume.index');
+    }
+
+    public function listVolumePekerjaan(){
+        $allVolumePekerjaan = VolumePekerjaan::all();
+        return $allVolumePekerjaan;
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'nilai' => 'required',
+        ]);
+
+        $volumePekerjaan = New VolumePekerjaan;
+        $volumePekerjaan->nama = $request->nama;
+        $volumePekerjaan->nilai = $request->nilai; 
+        $volumePekerjaan->save();
+
+        return $volumePekerjaan;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'nilai' => 'required',
+        ]);
+
+
+        return VolumePekerjaan::find($id)->update($request->all());
+    }
+
+    public function destroy($id)
+    {
+       return VolumePekerjaan::find($id)->delete();
     }
 }

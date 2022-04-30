@@ -60,15 +60,15 @@ Jenis Alat Berat
             <div class="form-row">
               <label class="col-lg-2" for="id_proyek">Proyek</label>
               <div class="form-group col-md-8">
-                  <select v-model="form.id_proyek" id="id_proyek" onchange="selectTrigger()" placeholder="Pilih Proyek"
-                      style="width: 100%" class="form-control custom-select">
-                      <option disabled value="">- Pilih Proyek -</option>
-                      <option v-for="item in allProyek" :value="item.id">
-                          @{{  item.nama }}</option>
-                  </select>
-                  <has-error :form="form" field="id_proyek"></has-error>
+                <select v-model="form.id_proyek" id="id_proyek" onchange="selectTrigger()" placeholder="Pilih Proyek"
+                    style="width: 100%" class="form-control custom-select">
+                    <option disabled value="">- Pilih Proyek -</option>
+                    <option v-for="item in allProyek" :value="item.id">
+                        @{{  item.nama }}</option>
+                </select>
+                <has-error :form="form" field="id_proyek"></has-error>
               </div>
-          </div>
+            </div>
             <div class="form-row">
               <label class="col-lg-2" for="nama"> Nama </label>
               <div class="form-group col-md-8">

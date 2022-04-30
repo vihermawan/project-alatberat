@@ -21,7 +21,3 @@ use App\Http\Controllers\API\ProductController as ProductApiController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::resources(['blogs' => BlogApiController::class]);
-Route::resources(['buyers' => BuyerApiController::class]);
-Route::resources(['products' => ProductApiController::class]);

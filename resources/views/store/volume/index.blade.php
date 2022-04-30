@@ -19,13 +19,15 @@ Volume Pekerjaan
                   <tr>
                     <th>No</th>
                     <th>Nama</th>
+                    <th>Nilai</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
-                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.nama}}</td>
+                  <td>@{{ item.nilai}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i
@@ -56,11 +58,19 @@ Volume Pekerjaan
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
             <div class="form-row">
-              <label class="col-lg-2" for="name"> Nama </label>
+              <label class="col-lg-2" for="nama"> Nama </label>
               <div class="form-group col-md-8">
-                <input v-model="form.name" id="name" type="text" min=0 placeholder="Masukkan nama Volume Pekerjaan"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                <has-error :form="form" field="name"></has-error>
+                <input v-model="form.nama" id="nama" type="text" min=0 placeholder="Masukkan nama Volume Pekerjaan"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('nama') }">
+                <has-error :form="form" field="nama"></has-error>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="col-lg-2" for="nilai"> Nilai </label>
+              <div class="form-group col-md-8">
+                <input v-model="form.nilai" id="nilai" type="text" min=0 placeholder="Masukkan nilai Volume Pekerjaan"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('nilai') }">
+                <has-error :form="form" field="nilai"></has-error>
               </div>
             </div>
           <div class="modal-footer">
@@ -79,11 +89,11 @@ Volume Pekerjaan
   var app = new Vue({
     el: '#app',
     data: {
-      mainData: [
-      ],
+      mainData: [],
       form: new Form({
         id: '',
-        name: '',
+        nama: '',
+        nilai: '',
       }),
       editMode: false,
     },
@@ -104,8 +114,36 @@ Volume Pekerjaan
         $('#modal').modal('show');
       },
       storeData(){
+        this.form.post("{{ route('volumePekerjaan.store') }}")
+        .then(response => {
+          console.log('res',response)
+          $('#modal').modal('hide');
+          Swal.fire(
+              'Berhasil',
+              'Data volume pekerjaan berhasil ditambahkan',
+              'success'
+          )
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       updateData(){
+        url = "{{ route('volumePekerjaan.update', ':id') }}".replace(':id', this.form.id)
+        this.form.put(url)
+        .then(response => {
+          $('#modal').modal('hide');
+          Swal.fire(
+            'Berhasil',
+            'Data volume pekerjaan berhasil diubah',
+            'success'
+          )
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       deleteData(id){
         Swal.fire({
@@ -119,11 +157,35 @@ Volume Pekerjaan
           cancelButtonText: 'Batal'
       }).then((result) => {
           if (result.value) {
-            console.log('delete')
+            url = "{{ route('volumePekerjaan.destroy', ':id') }}".replace(':id', id)
+            this.form.delete(url)
+            .then(response => {
+              console.log('res',response)
+              Swal.fire(
+                'Terhapus',
+                'Data volume pekerjaan telah dihapus',
+                'success'
+              )
+              this.refreshData()
+            })
+            .catch(e => {
+                e.response.status != 422 ? console.log(e) : '';
+            })
           }
       })
       },
       refreshData() {
+        axios.get("{{ route('volumePekerjaan.list') }}")
+        .then(response => {
+          $('#table').DataTable().destroy()
+          this.mainData = response.data
+          this.$nextTick(function () {
+              $('#table').DataTable();
+          })
+        })
+        .catch(e => {
+          e.response.status != 422 ? console.log(e) : '';
+        })
       }
     },
   })

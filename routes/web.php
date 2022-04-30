@@ -62,6 +62,12 @@ Route::get('/all-tipe-alat',[AlatBeratController::class, 'listTipeAlat'])->name(
 Route::delete('/delete-tipe-alat/{id}',[AlatBeratController::class, 'destroyTipeAlat'])->name('tipeAlat.destroy');
 Route::put('/update-tipe-alat/{id}',[AlatBeratController::class, 'updateTipeAlat'])->name('tipeAlat.update');
 
+/*volume pekerjaan*/
+Route::post('/create-volume-pekerjaan',[VolumeController::class, 'store'])->name('volumePekerjaan.store');
+Route::get('/all-volume-pekerjaan',[VolumeController::class, 'listvolumePekerjaan'])->name('volumePekerjaan.list');
+Route::delete('/delete-volume-pekerjaan/{id}',[VolumeController::class, 'destroy'])->name('volumePekerjaan.destroy');
+Route::put('/update-volume-pekerjaan/{id}',[VolumeController::class, 'update'])->name('volumePekerjaan.update');
+
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');
 Route::get('/admins',[AdminController::class, 'listAdmin'])->name('admin.list');

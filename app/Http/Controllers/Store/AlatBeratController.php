@@ -57,11 +57,14 @@ class AlatBeratController extends Controller
     }
     
     public function indexTipe(){
-        return view('store.alat_berat.tipe.index');
+        $allJenisAlat= JenisAlat::all();
+        return view('store.alat_berat.tipe.index',compact('allJenisAlat'));
     }
 
     public function listTipeAlat(){
-        $allTipeAlat = TipeAlat::all();
+        $allTipeAlat = TipeAlat::select('tipe_alat.*', 'jenis_alat.nama as nama_jenis_alat','jenis_alat.id')
+                    ->leftJoin('jenis_alat', 'tipe_alat.id_jenis_alat', '=', 'jenis_alat.id')
+                    ->get();
         return $allTipeAlat;
     }
 
@@ -72,12 +75,12 @@ class AlatBeratController extends Controller
             'nama' => 'required',
         ]);
 
-        $jenisAlat = New JenisAlat;
-        $jenisAlat->id_jenis_alat = $request->id_jenis_alat;
-        $jenisAlat->nama = $request->nama; 
-        $jenisAlat->save();
+        $tipeAlat = New TipeAlat;
+        $tipeAlat->id_jenis_alat = $request->id_jenis_alat;
+        $tipeAlat->nama = $request->nama; 
+        $tipeAlat->save();
 
-        return $jenisAlat;
+        return $tipeAlat;
     }
 
     public function updateTipeAlat(Request $request, $id)
