@@ -21,14 +21,16 @@ class AlatBeratController extends Controller
     }
 
     public function listJenisAlat(){
-        $allJenisAlat = JenisAlat::select('jenis_alat.*', 'proyek.nama as nama_proyek','proyek.id')
+        $allJenisAlat = JenisAlat::select('jenis_alat.*', 'proyek.nama as nama_proyek','proyek.id as id_proyek')
                         ->leftJoin('proyek', 'jenis_alat.id_proyek', '=', 'proyek.id')
                         ->get();
         return $allJenisAlat;
     }
 
     public function filterJenisAlat($id){
-        $allJenisAlat = JenisAlat::where('jenis_alat.id_proyek','=',$id)
+        $allJenisAlat = JenisAlat::select('jenis_alat.*', 'proyek.nama as nama_proyek','proyek.id as id_proyek')
+                        ->leftJoin('proyek', 'jenis_alat.id_proyek', '=', 'proyek.id')
+                        ->where('jenis_alat.id_proyek','=',$id)
                         ->get();
         return $allJenisAlat;
     }
@@ -68,14 +70,16 @@ class AlatBeratController extends Controller
     }
 
     public function listTipeAlat(){
-        $allTipeAlat = TipeAlat::select('tipe_alat.*', 'jenis_alat.nama as nama_jenis_alat','jenis_alat.id')
+        $allTipeAlat = TipeAlat::select('tipe_alat.*', 'jenis_alat.nama as nama_jenis_alat','jenis_alat.id as id_jenis_alat')
                     ->leftJoin('jenis_alat', 'tipe_alat.id_jenis_alat', '=', 'jenis_alat.id')
                     ->get();
         return $allTipeAlat;
     }
 
     public function filterTipeAlat($id){
-        $allTipeAlat = TipeAlat::where('tipe_alat.id_jenis_alat','=',$id)
+        $allTipeAlat = TipeAlat::select('tipe_alat.*', 'jenis_alat.nama as nama_jenis_alat','jenis_alat.id as id_jenis_alat')
+                    ->leftJoin('jenis_alat', 'tipe_alat.id_jenis_alat', '=', 'jenis_alat.id')
+                    ->where('tipe_alat.id_jenis_alat','=',$id)
                     ->get();
         return $allTipeAlat;
     }
@@ -85,11 +89,15 @@ class AlatBeratController extends Controller
         $request->validate([
             'id_jenis_alat' => 'required',
             'nama' => 'required',
+            'merk' => 'required',
+            'kapasitas_bucket' => 'required',
         ]);
 
         $tipeAlat = New TipeAlat;
         $tipeAlat->id_jenis_alat = $request->id_jenis_alat;
         $tipeAlat->nama = $request->nama; 
+        $tipeAlat->merk = $request->merk; 
+        $tipeAlat->kapasitas_bucket = $request->kapasitas_bucket; 
         $tipeAlat->save();
 
         return $tipeAlat;

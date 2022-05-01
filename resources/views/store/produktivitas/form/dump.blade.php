@@ -31,7 +31,7 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.dump.cycle_time_excavator" id="cycle_time_excavator" type="number" step="0.01" placeholder="Masukkan cycle time excavator"
+          <input v-model="form.dump.cycle_time_excavator" id="cycle_time_excavator" type="number" step="0.0001" placeholder="Masukkan cycle time excavator"
               class="form-control" :class="{ 'is-invalid': form.errors.has('cycle_time_excavator') }">
           <has-error :form="form" field="cycle_time_excavator"></has-error>
         </div>

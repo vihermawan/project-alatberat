@@ -75,6 +75,7 @@ Route::post('/create-produktivitas',[ProduktivitasController::class, 'store'])->
 Route::get('/all-produktivitas',[ProduktivitasController::class, 'listProduktivitas'])->name('produktivitas.list');
 Route::delete('/delete-produktivitas/{id}',[ProduktivitasController::class, 'destroy'])->name('produktivitas.destroy');
 Route::put('/update-produktivitas/{id}',[ProduktivitasController::class, 'update'])->name('produktivitas.update');
+Route::get('/filter-tipe-produktivitas/{id}',[ProduktivitasController::class, 'filterProduktivitas'])->name('produktivitas.filter');
 
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');

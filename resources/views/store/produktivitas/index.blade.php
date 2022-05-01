@@ -106,7 +106,7 @@ Produktivitas
       <div class="modal-header ">
         <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Produktivitas</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="keluar">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="keluar"  @click="emptyFilter()">×</button>
       </div>
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
@@ -154,7 +154,7 @@ Produktivitas
             @include('store.produktivitas.form.compactor')
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-dismiss="modal" id="batal">Batal</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal" id="batal" @click="emptyFilter()">Batal</button>
             <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
             <button v-show="editMode" type="submit" class="btn btn-success">Ubah</button>
           </div>
@@ -191,14 +191,6 @@ Produktivitas
     app.inputSelectTipeAlat()
   }
 
-  $('#keluar').click(function(){
-   app.emptyFilter()
-  });
-
-  $('#batal').click(function(){
-   app.emptyFilter()
-  });
-  
   var app = new Vue({
     el: '#app',
     data: {
@@ -269,11 +261,9 @@ Produktivitas
         $('#modal').modal('show');
       },
       editModal(data){
-        console.log('data',data)
-
         this.editMode = true;
+        let detailData = JSON.parse(data.parameter) 
         if(data.nama_jenis_alat === "Hydraulic Excavator"){
-          let detailData = JSON.parse(data.parameter) 
           this.hydraulicMode = true
           this.form.hydraulic.bucket_fill_factor = detailData.bucket_fill_factor
           this.form.hydraulic.waktu_putar = detailData.waktu_putar
@@ -286,10 +276,43 @@ Produktivitas
           this.form.id_tipe_alat = data.id_tipe_alat
         }else if(data.nama_jenis_alat === "Dump Truck"){
           this.dumpMode = true
+          this.form.dump.kapasitas_dump = detailData.kapasitas_dump
+          this.form.dump.bucket_fill_factor = detailData.bucket_fill_factor
+          this.form.dump.cycle_time_excavator = detailData.cycle_time_excavator
+          this.form.dump.jarak_angkut = detailData.jarak_angkut
+          this.form.dump.loaded_speed = detailData.loaded_speed
+          this.form.dump.empty_speed = detailData.empty_speed
+          this.form.dump.standby_dumping_time = detailData.standby_dumping_time
+          this.form.dump.spot_delay_time = detailData.spot_delay_time
+          this.form.dump.job_efficiency = detailData.job_efficiency
+          this.form.id = data.id
+          this.form.id_jenis_alat = [data.id_jenis_alat,data.nama_jenis_alat]
+          this.form.id_tipe_alat = data.id_tipe_alat
         }else if(data.nama_jenis_alat === "Bulldozer"){
           this.bulldozerMode = true
+          this.form.bulldozer.kapasitas_blade = detailData.kapasitas_blade
+          this.form.bulldozer.blade_factor = detailData.blade_factor
+          this.form.bulldozer.jarak_dorong = detailData.jarak_dorong
+          this.form.bulldozer.fordward_speed = detailData.fordward_speed
+          this.form.bulldozer.reverse_speed = detailData.reverse_speed
+          this.form.bulldozer.gear_shifting = detailData.gear_shifting
+          this.form.bulldozer.grade_factor = detailData.grade_factor
+          this.form.bulldozer.job_efficiency = detailData.job_efficiency
+          this.form.id = data.id
+          this.form.id_jenis_alat = [data.id_jenis_alat,data.nama_jenis_alat]
+          this.form.id_tipe_alat = data.id_tipe_alat
         }else{
           this.compactorMode = true
+          this.form.compactor.lebar_pemadatan = detailData.lebar_pemadatan
+          this.form.compactor.lebar_blade = detailData.lebar_blade
+          this.form.compactor.lebar_overlap = detailData.lebar_overlap
+          this.form.compactor.number_of_trips = detailData.number_of_trips
+          this.form.compactor.kecepatan_kerja = detailData.kecepatan_kerja
+          this.form.compactor.job_efficiency = detailData.job_efficiency
+          this.form.compactor.tebal_lapisan_tanah = detailData.tebal_lapisan_tanah
+          this.form.id = data.id
+          this.form.id_jenis_alat = [data.id_jenis_alat,data.nama_jenis_alat]
+          this.form.id_tipe_alat = data.id_tipe_alat
         }
         this.form.clear();
         $('#modal').modal('show');
@@ -304,6 +327,8 @@ Produktivitas
               'Data produktivias berhasil ditambahkan',
               'success'
           )
+
+          this.emptyFilter()
           this.refreshData()
         })
         .catch(e => {
@@ -359,19 +384,56 @@ Produktivitas
         this.mainData = [];
         axios.get("{{ route('produktivitas.list') }}")
         .then(response => {
-          console.log('main data atas',this.mainData)
           if (response.data.length !== 0){
             let array = []
             for(let data of response.data){
               let params = JSON.parse(data.parameter)
               let parameter = ""
-              parameter += "Standart cycle time :" + params.standart_cycle_time  + " menit"
-              parameter +=  "<br/> " +"Cms :" + params.cms
-              parameter +=  "<br/> " +"Kapasitas Bucket :" + params.kapasitas_bucket  + " m<sup>3</sup>"
-              parameter +=  "<br/> " +"Bucket Fill Factor :" + params.bucket_fill_factor
-              parameter +=  "<br/> " +"Faktor Kedalaman :" + params.faktor_kedalaman
-              parameter +=  "<br/> " +"Faktor Efisiensi Kerja :" + params.faktor_efisiensi_kerja
-              data.parameterString = parameter
+              if(data.nama_jenis_alat === "Hydraulic Excavator"){
+                parameter += "Standart cycle time :" + params.standart_cycle_time  + " menit"
+                parameter +=  "<br/> " +"Cms :" + params.cms
+                parameter +=  "<br/> " +"Kapasitas Bucket :" + params.kapasitas_bucket  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Bucket Fill Factor :" + params.bucket_fill_factor
+                parameter +=  "<br/> " +"Faktor Kedalaman :" + params.faktor_kedalaman
+                parameter +=  "<br/> " +"Faktor Efisiensi Kerja :" + params.faktor_efisiensi_kerja
+                data.parameterString = parameter
+              }else if(data.nama_jenis_alat === "Dump Truck"){
+                parameter += "Kapasitas dump :" + params.kapasitas_dump  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Kapasitas bucket :" + params.kapasitas_bucket + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Bucket fill factor :" + params.bucket_fill_factor  
+                parameter +=  "<br/> " +"Jumlah siklus :" + params.jumlah_siklus
+                parameter +=  "<br/> " +"Produktivitas per siklus :" + params.produktivitas_per_siklus
+                parameter +=  "<br/> " +"Cycle time excavator :" + params.cycle_time_excavator + " menit"
+                parameter +=  "<br/> " +"Jarak angkut :" + params.jarak_angkut + " meter"
+                parameter +=  "<br/> " +"Loaded speed :" + params.loaded_speed + " m/menit"
+                parameter +=  "<br/> " +"Empty speed :" + params.empty_speed + " m/menit"
+                parameter +=  "<br/> " +"Standby dumping time :" + params.standby_dumping_time + " menit"
+                parameter +=  "<br/> " +"Spot delay time :" + params.spot_delay_time + " menit"
+                parameter +=  "<br/> " +"Waktu siklus :" + params.waktu_siklus + " menit"
+                parameter +=  "<br/> " +"Jumlah dump truck :" + params.jumlah_dump_truck + " unit"
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                data.parameterString = parameter
+              }else if(data.nama_jenis_alat === "Bulldozer"){
+                parameter += "Kapasitas blade :" + params.kapasitas_blade  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Blade factor :" + params.blade_factor 
+                parameter +=  "<br/> " +"Jarak dorong :" + params.jarak_dorong  + " meter"
+                parameter +=  "<br/> " +"Forward speed :" + params.fordward_speed + " m/menit"
+                parameter +=  "<br/> " +"Produktivitas per siklus :" + params.produktivitas_per_siklus + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Reverse speed :" + params.reverse_speed + " m/menit"
+                parameter +=  "<br/> " +"Gear shifting :" + params.gear_shifting + " menit"
+                parameter +=  "<br/> " +"Grade factor :" + params.grade_factor
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                data.parameterString = parameter
+              }else{
+                parameter += "Lebar pemadatan :" + params.lebar_pemadatan  + " meter"
+                parameter +=  "<br/> " +"Lebar Blade :" + params.lebar_blade + " mm"
+                parameter +=  "<br/> " +"Lebar overlap :" + params.lebar_overlap  + " meter"
+                parameter +=  "<br/> " +"Number of trips :" + params.number_of_trips 
+                parameter +=  "<br/> " +"Kecepatan kerja :" + params.kecepatan_kerja + " m/jam"
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                parameter +=  "<br/> " +"Tebal lapisan tanah :" + params.tebal_lapisan_tanah + " meter"
+                data.parameterString = parameter
+              }
               data.produktivitas = data.hasil + " m<sup>3</sup>/jam"
               array.push(data)          
             }
@@ -379,7 +441,6 @@ Produktivitas
           }else{
             this.mainData = [];
           }
-          
         })
         .catch(e => {
           e.response.status != 422 ? console.log(e) : '';
@@ -395,11 +456,67 @@ Produktivitas
         this.form.id_tipe_alat =  $("#id_tipe_alat").val()
       },
       filterData(){
-        url = "{{ route('jenisAlat.filter', ':id') }}".replace(':id', this.form.id_proyek)
+        url = "{{ route('produktivitas.filter', ':id') }}".replace(':id', this.form.id_jenis_alat)
         this.form.get(url)
         .then(response => {
           $('#table').DataTable().destroy()
-          this.mainData = response.data
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              let params = JSON.parse(data.parameter)
+              let parameter = ""
+              if(data.nama_jenis_alat === "Hydraulic Excavator"){
+                parameter += "Standart cycle time :" + params.standart_cycle_time  + " menit"
+                parameter +=  "<br/> " +"Cms :" + params.cms
+                parameter +=  "<br/> " +"Kapasitas Bucket :" + params.kapasitas_bucket  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Bucket Fill Factor :" + params.bucket_fill_factor
+                parameter +=  "<br/> " +"Faktor Kedalaman :" + params.faktor_kedalaman
+                parameter +=  "<br/> " +"Faktor Efisiensi Kerja :" + params.faktor_efisiensi_kerja
+                data.parameterString = parameter
+              }else if(data.nama_jenis_alat === "Dump Truck"){
+                parameter += "Kapasitas dump :" + params.kapasitas_dump  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Kapasitas bucket :" + params.kapasitas_bucket + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Bucket fill factor :" + params.bucket_fill_factor  
+                parameter +=  "<br/> " +"Jumlah siklus :" + params.jumlah_siklus
+                parameter +=  "<br/> " +"Produktivitas per siklus :" + params.produktivitas_per_siklus
+                parameter +=  "<br/> " +"Cycle time excavator :" + params.cycle_time_excavator + " menit"
+                parameter +=  "<br/> " +"Jarak angkut :" + params.jarak_angkut + " meter"
+                parameter +=  "<br/> " +"Loaded speed :" + params.loaded_speed + " m/menit"
+                parameter +=  "<br/> " +"Empty speed :" + params.empty_speed + " m/menit"
+                parameter +=  "<br/> " +"Standby dumping time :" + params.standby_dumping_time + " menit"
+                parameter +=  "<br/> " +"Spot delay time :" + params.spot_delay_time + " menit"
+                parameter +=  "<br/> " +"Waktu siklus :" + params.waktu_siklus + " menit"
+                parameter +=  "<br/> " +"Jumlah dump truck :" + params.jumlah_dump_truck + " unit"
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                data.parameterString = parameter
+              }else if(data.nama_jenis_alat === "Bulldozer"){
+                parameter += "Kapasitas blade :" + params.kapasitas_blade  + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Blade factor :" + params.blade_factor 
+                parameter +=  "<br/> " +"Jarak dorong :" + params.jarak_dorong  + " meter"
+                parameter +=  "<br/> " +"Forward speed :" + params.fordward_speed + " m/menit"
+                parameter +=  "<br/> " +"Produktivitas per siklus :" + params.produktivitas_per_siklus + " m<sup>3</sup>"
+                parameter +=  "<br/> " +"Reverse speed :" + params.reverse_speed + " m/menit"
+                parameter +=  "<br/> " +"Gear shifting :" + params.gear_shifting + " menit"
+                parameter +=  "<br/> " +"Grade factor :" + params.grade_factor
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                data.parameterString = parameter
+              }else{
+                parameter += "Lebar pemadatan :" + params.lebar_pemadatan  + " meter"
+                parameter +=  "<br/> " +"Lebar Blade :" + params.lebar_blade + " mm"
+                parameter +=  "<br/> " +"Lebar overlap :" + params.lebar_overlap  + " meter"
+                parameter +=  "<br/> " +"Number of trips :" + params.number_of_trips 
+                parameter +=  "<br/> " +"Kecepatan kerja :" + params.kecepatan_kerja + " m/jam"
+                parameter +=  "<br/> " +"Job efficiency :" + params.job_efficiency 
+                parameter +=  "<br/> " +"Tebal lapisan tanah :" + params.tebal_lapisan_tanah + " meter"
+                data.parameterString = parameter
+              }
+              data.produktivitas = data.hasil + " m<sup>3</sup>/jam"
+              array.push(data)          
+            }
+            this.mainData = array
+          }else{
+            this.mainData = [];
+          }
           this.$nextTick(function () {
               $('#table').DataTable();
           })
@@ -425,7 +542,6 @@ Produktivitas
         })
       },
       getTipeAlat(id){
-        console.log('tes',id)
         url = "{{ route('tipeAlat.filter', ':id') }}".replace(':id', id)
         axios.get(url)
         .then(response => {
@@ -436,8 +552,13 @@ Produktivitas
         })
       },
       emptyFilter(){
-        this.allJenisAlat=[];
-        this.allTipeAlat=[];
+        console.log('clear')
+        this.form.clear();
+        this.form.reset();
+        this.hydraulicMode = false;
+        this.dumpMode = false;
+        this.bulldozerMode = false;
+        this.compactorMode = false;
       },
       showFieldModal(name){
         if(name === "Hydraulic Excavator"){
@@ -449,7 +570,7 @@ Produktivitas
         }else{
           this.compactorMode = true
         }
-      },  
+      },
     },
   })
 </script>

@@ -84,7 +84,7 @@ Tipe Alat Berat
       <div class="modal-header ">
         <h4 class="modal-title" v-show="!editMode" id="myLargeModalLabel">Tambah Tipe Alat Berat</h4>
         <h4 class="modal-title" v-show="editMode" id="myLargeModalLabel">Edit</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="emptyFilter()">×</button>
       </div>
       <form @submit.prevent="editMode ? updateData() : storeData()" @keydown="form.onKeydown($event)" id="form">
           <div class="modal-body mx-4">
@@ -108,8 +108,24 @@ Tipe Alat Berat
                 <has-error :form="form" field="nama"></has-error>
               </div>
             </div>
+            <div class="form-row">
+              <label class="col-lg-2" for="merk"> Merk </label>
+              <div class="form-group col-md-8">
+                <input v-model="form.merk" id="merk" type="text" min=0 placeholder="Masukkan merk alat berat"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('merk') }">
+                <has-error :form="form" field="merk"></has-error>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="col-lg-2" for="kapasitas_bucket"> Kapasistas Bucket </label>
+              <div class="form-group col-md-8">
+                <input v-model="form.kapasitas_bucket" id="kapasitas_bucket" type="number" step="0.01" min=0 placeholder="Masukkan kapasitas bucket alat berat"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('kapasitas_bucket') }">
+                <has-error :form="form" field="kapasitas_bucket"></has-error>
+              </div>
+            </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal" @click="emptyFilter()">Batal</button>
             <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
             <button v-show="editMode" type="submit" class="btn btn-success">Ubah</button>
           </div>
@@ -124,6 +140,13 @@ Tipe Alat Berat
   function selectTrigger() {
       app.inputSelect()
   }
+  $('#keluar').click(function(){
+   app.emptyFilter()
+  });
+
+  $('#batal').click(function(){
+   app.emptyFilter()
+  });
   var app = new Vue({
     el: '#app',
     data: {
@@ -133,6 +156,8 @@ Tipe Alat Berat
         id: '',
         nama: '',
         id_jenis_alat: '',
+        kapasitas_bucket: '',
+        merk :'',
       }),
       allJenisAlat : @json($allJenisAlat),
       editMode: false,
@@ -247,7 +272,11 @@ Tipe Alat Berat
       resetData(){
         this.form.id_jenis_alat= '';
         this.refreshData()
-      }
+      },
+      emptyFilter(){
+        this.form.clear();
+        this.form.reset();
+      },
     },
   })
 </script>
