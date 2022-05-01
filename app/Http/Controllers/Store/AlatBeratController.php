@@ -91,6 +91,7 @@ class AlatBeratController extends Controller
             'nama' => 'required',
             'merk' => 'required',
             'kapasitas_bucket' => 'required',
+            'sewa_bulanan' => 'required',
         ]);
 
         $tipeAlat = New TipeAlat;
@@ -98,6 +99,7 @@ class AlatBeratController extends Controller
         $tipeAlat->nama = $request->nama; 
         $tipeAlat->merk = $request->merk; 
         $tipeAlat->kapasitas_bucket = $request->kapasitas_bucket; 
+        $tipeAlat->sewa_bulanan = $request->sewa_bulanan; 
         $tipeAlat->save();
 
         return $tipeAlat;
@@ -107,6 +109,9 @@ class AlatBeratController extends Controller
     {
         $request->validate([
             'nama' => 'required',
+            'merk' => 'required',
+            'kapasitas_bucket' => 'required',
+            'sewa_bulanan' => 'required',
         ]);
 
         return TipeAlat::find($id)->update($request->all());

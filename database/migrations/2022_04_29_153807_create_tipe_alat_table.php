@@ -19,6 +19,7 @@ class CreateTipeAlatTable extends Migration
             $table->string('nama')->nullable();
             $table->integer('id_jenis_alat')->nullable();
             $table->string('kapasitas_bucket')->nullable();
+            $table->float('sewa_bulanan', 10, 0)->nullable();
             $table->timestamps();
         });
     }

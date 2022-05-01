@@ -51,6 +51,9 @@ Tipe Alat Berat
                     <th>No</th>
                     <th>Nama</th>
                     <th>Jenis Alat</th>
+                    <th>Merk</th>
+                    <th>Kapasitas Bucket</th>
+                    <th>Sewa/bulan</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
@@ -59,6 +62,9 @@ Tipe Alat Berat
                   <td>@{{ index+1 }}</td>
                   <td>@{{ item.nama}}</td>
                   <td>@{{ item.nama_jenis_alat}}</td>
+                  <td>@{{ item.merk}}</td>
+                  <td>@{{ item.kapasitas_bucket}}</td>
+                  <td>@{{ item.sewa_bulanan}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i
@@ -117,6 +123,14 @@ Tipe Alat Berat
               </div>
             </div>
             <div class="form-row">
+              <label class="col-lg-2" for="sewa_bulanan"> Biaya sewa bulanan </label>
+              <div class="form-group col-md-8">
+                <input v-model="form.sewa_bulanan" id="sewa_bulanan" type="text" min=0 placeholder="Masukkan sewa bulanan"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('sewa_bulanan') }">
+                <has-error :form="form" field="sewa_bulanan"></has-error>
+              </div>
+            </div>
+            <div class="form-row">
               <label class="col-lg-2" for="kapasitas_bucket"> Kapasistas Bucket </label>
               <div class="form-group col-md-8">
                 <input v-model="form.kapasitas_bucket" id="kapasitas_bucket" type="number" step="0.01" min=0 placeholder="Masukkan kapasitas bucket alat berat"
@@ -147,6 +161,7 @@ Tipe Alat Berat
   $('#batal').click(function(){
    app.emptyFilter()
   });
+
   var app = new Vue({
     el: '#app',
     data: {
@@ -158,6 +173,7 @@ Tipe Alat Berat
         id_jenis_alat: '',
         kapasitas_bucket: '',
         merk :'',
+        sewa_bulanan : '',      
       }),
       allJenisAlat : @json($allJenisAlat),
       editMode: false,
@@ -179,6 +195,9 @@ Tipe Alat Berat
         $('#modal').modal('show');
       },
       storeData(){
+        let data = $("#sewa_bulanan ").val().split(" ")
+        let result = data[1].replace(".","")
+        this.form.sewa_bulanan = new Number(result)
         this.form.post("{{ route('tipeAlat.store') }}")
         .then(response => {
           console.log('res',response)
@@ -243,12 +262,26 @@ Tipe Alat Berat
         axios.get("{{ route('tipeAlat.list') }}")
         .then(response => {
           $('#table').DataTable().destroy()
-          this.mainData = response.data
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              const format = data.sewa_bulanan.toString().split('').reverse().join('');
+              const convert = format.match(/\d{1,3}/g);
+              const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
+              data.sewa_bulanan = rupiah
+              array.push(data)
+            }
+            this.mainData = array
+          }else{
+            this.mainData = [];
+          }
+
           this.$nextTick(function () {
               $('#table').DataTable();
           })
         })
         .catch(e => {
+          console.log('err',e)
           e.response.status != 422 ? console.log(e) : '';
         })
       },
@@ -279,5 +312,29 @@ Tipe Alat Berat
       },
     },
   })
+
+  var dengan_rupiah = document.getElementById('sewa_bulanan');
+  dengan_rupiah.addEventListener('keyup', function(e)
+  {
+    dengan_rupiah.value = formatRupiah(this.value, 'Rp. ');
+  });
+    
+    /* Fungsi */
+    function formatRupiah(angka, prefix)
+    {
+      var number_string = angka.replace(/[^,\d]/g, '').toString(),
+          split    = number_string.split(','),
+          sisa     = split[0].length % 3,
+          rupiah     = split[0].substr(0, sisa),
+          ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+          
+      if (ribuan) {
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+      
+      rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+      return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+    }
 </script>
 @endpush

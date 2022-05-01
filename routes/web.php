@@ -77,6 +77,13 @@ Route::delete('/delete-produktivitas/{id}',[ProduktivitasController::class, 'des
 Route::put('/update-produktivitas/{id}',[ProduktivitasController::class, 'update'])->name('produktivitas.update');
 Route::get('/filter-tipe-produktivitas/{id}',[ProduktivitasController::class, 'filterProduktivitas'])->name('produktivitas.filter');
 
+/*kebutuhan alat */
+Route::post('/create-kebutuhan-alat',[KebutuhanAlatController::class, 'store'])->name('kebutuhanAlat.store');
+Route::get('/all-kebutuhan-alat',[KebutuhanAlatController::class, 'listkebutuhanAlat'])->name('kebutuhanAlat.list');
+Route::delete('/delete-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'destroy'])->name('kebutuhanAlat.destroy');
+Route::put('/update-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'update'])->name('kebutuhanAlat.update');
+Route::get('/filter-tipe-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'filterkebutuhanAlat'])->name('kebutuhanAlat.filter');
+
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');
 Route::get('/admins',[AdminController::class, 'listAdmin'])->name('admin.list');
