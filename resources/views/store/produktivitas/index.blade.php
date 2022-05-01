@@ -320,7 +320,6 @@ Produktivitas
       storeData(){
         this.form.post("{{ route('produktivitas.store') }}")
         .then(response => {
-          console.log('res',response)
           $('#modal').modal('hide');
           Swal.fire(
               'Berhasil',

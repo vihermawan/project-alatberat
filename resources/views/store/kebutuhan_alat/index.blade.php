@@ -78,11 +78,12 @@ Kebutuhan Alat
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
-                  <td>@{{ item.email}}</td>
-                  <td>@{{ item.email}}</td>
-                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.nama_tipe_alat}}</td>
+                  <td>@{{ item.jumlahAlat}}</td>
+                  <td v-html="item.parameterString"></td>
+                  <td>@{{ item.sewa_harian}}</td>
                   <td>
-                    <a href="javascript:void(0);" @click="editModal(item)" class="text-success"
+                    <a href="javascript:void(0);" v-show="item.nama_jenis_alat == 'Dump Truck'" @click="editModal(item)" class="text-success"
                       data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i
                       class="far fa-edit"></i></a>
                     <a href="javascript:void(0);" @click="deleteData(item.id)" class="text-danger"
@@ -208,6 +209,7 @@ Kebutuhan Alat
         id_volume_pekerjaan: '',
         dump:{
           jumlah_fleet: '',
+          jumlah_dt: '',
         },
       }),
       editMode: false,
@@ -233,13 +235,48 @@ Kebutuhan Alat
       },
       editModal(data){
         this.editMode = true;
-        this.form.fill(data)
+        let detailData = JSON.parse(data.parameter) 
+        this.dumpMode = true
+        this.form.id_volume_pekerjaan = data.id_volume_pekerjaan
+        this.form.dump.jumlah_fleet = detailData.jumlah_fleet
+        this.form.dump.jumlah_dt = detailData.jumlah_alat / detailData.jumlah_fleet
+        this.form.id = data.id
+        this.form.id_jenis_alat = [data.id_jenis_alat,data.nama_jenis_alat]
+        this.form.id_tipe_alat = data.id_tipe_alat
         this.form.clear();
         $('#modal').modal('show');
       },
       storeData(){
+        this.form.post("{{ route('kebutuhanAlat.store') }}")
+        .then(response => {
+          $('#modal').modal('hide');
+          Swal.fire(
+              'Berhasil',
+              'Data kebutuhan alat berhasil ditambahkan',
+              'success'
+          )
+          this.refreshData()
+          this.emptyFilter()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       updateData(){
+        url = "{{ route('kebutuhanAlat.update', ':id') }}".replace(':id', this.form.id)
+        this.form.put(url)
+        .then(response => {
+          $('#modal').modal('hide');
+          Swal.fire(
+            'Berhasil',
+            'Data kebutuhan alat berhasil diubah',
+            'success'
+          )
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       deleteData(id){
         Swal.fire({
@@ -253,20 +290,67 @@ Kebutuhan Alat
           cancelButtonText: 'Batal'
       }).then((result) => {
           if (result.value) {
-            console.log('delete')
+            url = "{{ route('kebutuhanAlat.destroy', ':id') }}".replace(':id', id)
+            this.form.delete(url)
+            .then(response => {
+              console.log('res',response)
+              Swal.fire(
+                'Terhapus',
+                'Data kebutuhan alat telah dihapus',
+                'success'
+              )
+              this.refreshData()
+            })
+            .catch(e => {
+                e.response.status != 422 ? console.log(e) : '';
+            })
           }
       })
       },
       refreshData() {
         axios.get("{{ route('kebutuhanAlat.list') }}")
         .then(response => {
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              let params = JSON.parse(data.parameter)
+              let parameter = ""
+
+              const format = data.hasil.toString().split('').reverse().join('');
+              const convert = format.match(/\d{1,3}/g);
+              const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
+              data.sewa_harian = rupiah
+             
+              if(data.nama_jenis_alat === "Dump Truck"){
+                parameter += "Volume Pekerjaan :" + params.volume_pekerjaan  + " m<sup>3</sup>"
+                parameter += "<br/> " + "Produktivitas per jam :" + params.produktivitas_per_jam  + " m<sup>3</sup>/jam"
+                parameter += "<br/> " + "Jam kerja per hari :" + params.jam_kerja_per_hari  + " jam"
+                parameter += "<br/> " + "Waktu pelaksanaan :" + params.waktu_pelaksanaan  + " hari kalender"
+                parameter += "<br/> " + "Jumlah fleet :" + params.jumlah_fleet  + " unit"
+                data.parameterString = parameter
+              }else{
+                parameter += "Volume Pekerjaan :" + params.volume_pekerjaan  + " m<sup>3</sup>"
+                parameter += "<br/> " + "Produktivitas per jam :" + params.produktivitas_per_jam  + " m<sup>3</sup>/jam"
+                parameter += "<br/> " + "Jam kerja per hari :" + params.jam_kerja_per_hari  + " jam"
+                parameter += "<br/> " + "Waktu pelaksanaan :" + params.waktu_pelaksanaan  + " hari kalender"
+                parameter += "<br/> " + "Produktivitas alat per hari :" + params.produktivitas_alat_per_hari  + " m<sup3</sup>"
+                parameter += "<br/> " + "Produktivitas alat min per hari :" + params.produktivitas_min_per_hari  + " m<sup3</sup>"
+                data.parameterString = parameter
+              }
+              data.jumlahAlat = params.jumlah_alat
+              array.push(data) 
+            }
+            this.mainData = array
+          }else{
+            this.mainData = []
+          }
           $('#table').DataTable().destroy()
-          this.mainData = response.data
           this.$nextTick(function () {
               $('#table').DataTable();
           })
         })
         .catch(e => {
+          console.log('err',e)
           e.response.status != 422 ? console.log(e) : '';
         })
       },
@@ -303,7 +387,51 @@ Kebutuhan Alat
         })
       },
       filterData(){
+        url = "{{ route('kebutuhanAlat.filter', ':id') }}".replace(':id', this.form.id_jenis_alat)
+        this.form.get(url)
+        .then(response => {
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              let params = JSON.parse(data.parameter)
+              let parameter = ""
 
+              const format = data.hasil.toString().split('').reverse().join('');
+              const convert = format.match(/\d{1,3}/g);
+              const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
+              data.sewa_harian = rupiah
+             
+              if(data.nama_jenis_alat === "Dump Truck"){
+                parameter += "Volume Pekerjaan :" + params.volume_pekerjaan  + " m<sup>3</sup>"
+                parameter += "<br/> " + "Produktivitas per jam :" + params.produktivitas_per_jam  + " m<sup>3</sup>/jam"
+                parameter += "<br/> " + "Jam kerja per hari :" + params.jam_kerja_per_hari  + " jam"
+                parameter += "<br/> " + "Waktu pelaksanaan :" + params.waktu_pelaksanaan  + " hari kalender"
+                parameter += "<br/> " + "Jumlah fleet :" + params.jumlah_fleet  + " unit"
+                data.parameterString = parameter
+              }else{
+                parameter += "Volume Pekerjaan :" + params.volume_pekerjaan  + " m<sup>3</sup>"
+                parameter += "<br/> " + "Produktivitas per jam :" + params.produktivitas_per_jam  + " m<sup>3</sup>/jam"
+                parameter += "<br/> " + "Jam kerja per hari :" + params.jam_kerja_per_hari  + " jam"
+                parameter += "<br/> " + "Waktu pelaksanaan :" + params.waktu_pelaksanaan  + " hari kalender"
+                parameter += "<br/> " + "Produktivitas alat per hari :" + params.produktivitas_alat_per_hari  + " m<sup3</sup>"
+                parameter += "<br/> " + "Produktivitas alat min per hari :" + params.produktivitas_min_per_hari  + " m<sup3</sup>"
+                data.parameterString = parameter
+              }
+              data.jumlahAlat = params.jumlah_alat
+              array.push(data) 
+            }
+            this.mainData = array
+          }else{
+            this.mainData = []
+          }
+          $('#table').DataTable().destroy()
+          this.$nextTick(function () {
+              $('#table').DataTable();
+          })
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       resetData(){
         this.form.id_proyek= '';

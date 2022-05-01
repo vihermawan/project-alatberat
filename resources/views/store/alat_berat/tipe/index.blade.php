@@ -293,7 +293,19 @@ Tipe Alat Berat
         this.form.get(url)
         .then(response => {
           $('#table').DataTable().destroy()
-          this.mainData = response.data
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              const format = data.sewa_bulanan.toString().split('').reverse().join('');
+              const convert = format.match(/\d{1,3}/g);
+              const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
+              data.sewa_bulanan = rupiah
+              array.push(data)
+            }
+            this.mainData = array
+          }else{
+            this.mainData = [];
+          }
           this.$nextTick(function () {
               $('#table').DataTable();
           })

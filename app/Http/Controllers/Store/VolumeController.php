@@ -44,8 +44,12 @@ class VolumeController extends Controller
             'nilai' => 'required',
         ]);
 
+        $volumePekerjaan = VolumePekerjaan::find($id);
+        $volumePekerjaan->nama = $request->nama;
+        $volumePekerjaan->nilai = $request->nilai; 
+        $volumePekerjaan->save();
 
-        return VolumePekerjaan::find($id)->update($request->all());
+        return $volumePekerjaan;
     }
 
     public function destroy($id)

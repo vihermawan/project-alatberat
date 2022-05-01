@@ -45,16 +45,118 @@ class KebutuhanAlatController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'id_tipe_alat' => 'required',
+            'id_volume_pekerjaan' => 'required',
+        ]);
 
+        $volumePekerjaan = VolumePekerjaan::where('id', $request->id_volume_pekerjaan)->first();
+
+        $produktivitas = Produktivitas::where('id_tipe_alat', $request->id_tipe_alat)->first();
+
+        $tipeAlat = TipeAlat::where('id',$request->id_tipe_alat)->first();
+
+        $jamKerja = 8;
+        $totalHari = 240;
+        $waktuPelaksanaan = 58;
+        
+        if($request->id_jenis_alat[1] == "Dump Truck"){
+            $request->validate([
+                'dump.jumlah_fleet' => 'required',
+                'dump.jumlah_dt' => 'required',
+            ]);
+
+            $jumlahAlat = $request->dump["jumlah_fleet"] * $request->dump["jumlah_dt"];
+
+            $parameter = [
+                'volume_pekerjaan' => $volumePekerjaan->nilai,
+                'produktivitas_per_jam' => $produktivitas->hasil,
+                'jam_kerja_per_hari' => $jamKerja,
+                'waktu_pelaksanaan' => $waktuPelaksanaan,
+                'jumlah_fleet' => $request->dump["jumlah_fleet"],
+                'jumlah_alat' => round($jumlahAlat,0),
+            ];
+
+            $biayaSewaPerJam = $jumlahAlat * round($tipeAlat->sewa_bulanan/$totalHari,0);
+
+            $kebutuhanAlat = New KebutuhanAlat;
+            $kebutuhanAlat->id_tipe_alat = $request->id_tipe_alat;
+            $kebutuhanAlat->id_volume_pekerjaan = $request->id_volume_pekerjaan;
+            $kebutuhanAlat->hasil = $biayaSewaPerJam;
+            $kebutuhanAlat->parameter = json_encode($parameter);
+            $kebutuhanAlat->save();
+            
+            return $kebutuhanAlat;
+        }else{
+            $produktivitasPerHari = $produktivitas->hasil * $jamKerja;
+            $produktivitasMinHari = $volumePekerjaan->nilai/$waktuPelaksanaan;
+            $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+
+            $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+            
+            $parameter = [
+                'volume_pekerjaan' => $volumePekerjaan->nilai,
+                'produktivitas_per_jam' => $produktivitas->hasil,
+                'jam_kerja_per_hari' => $jamKerja,
+                'waktu_pelaksanaan' => $waktuPelaksanaan,
+                'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
+                'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                'jumlah_alat' => round($jumlahAlat,0),
+            ];
+
+            $kebutuhanAlat = New KebutuhanAlat;
+            $kebutuhanAlat->id_tipe_alat = $request->id_tipe_alat;
+            $kebutuhanAlat->id_volume_pekerjaan = $request->id_volume_pekerjaan;
+            $kebutuhanAlat->hasil = $biayaSewaPerJam;
+            $kebutuhanAlat->parameter = json_encode($parameter);
+            $kebutuhanAlat->save();
+
+            return $kebutuhanAlat;
+        }
     }
 
     public function update(Request $request, $id)
     {
+        $volumePekerjaan = VolumePekerjaan::where('id', $request->id_volume_pekerjaan)->first();
 
+        $produktivitas = Produktivitas::where('id_tipe_alat', $request->id_tipe_alat)->first();
+
+        $tipeAlat = TipeAlat::where('id',$request->id_tipe_alat)->first();
+
+        $jamKerja = 8;
+        $totalHari = 240;
+        $waktuPelaksanaan = 58;
+
+        $request->validate([
+            'dump.jumlah_fleet' => 'required',
+            'dump.jumlah_dt' => 'required',
+        ]);
+
+        $jumlahAlat = $request->dump["jumlah_fleet"] * $request->dump["jumlah_dt"];
+
+        $parameter = [
+            'volume_pekerjaan' => $volumePekerjaan->nilai,
+            'produktivitas_per_jam' => $produktivitas->hasil,
+            'jam_kerja_per_hari' => $jamKerja,
+            'waktu_pelaksanaan' => $waktuPelaksanaan,
+            'jumlah_fleet' => $request->dump["jumlah_fleet"],
+            'jumlah_alat' => round($jumlahAlat,0),
+        ];
+
+        $biayaSewaPerJam = $jumlahAlat * round($tipeAlat->sewa_bulanan/$totalHari,0);
+
+        $kebutuhanAlat = KebutuhanAlat::find($id);
+        $kebutuhanAlat->id_tipe_alat = $request->id_tipe_alat;
+        $kebutuhanAlat->id_volume_pekerjaan = $request->id_volume_pekerjaan;
+        $kebutuhanAlat->hasil = $biayaSewaPerJam;
+        $kebutuhanAlat->parameter = json_encode($parameter);
+        $kebutuhanAlat->save();
+        
+        return $kebutuhanAlat;
     }
 
     public function destroy($id)
     {
-
+        return KebutuhanAlat::find($id)->delete();
     }
 }

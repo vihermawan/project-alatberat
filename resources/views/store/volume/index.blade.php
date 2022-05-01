@@ -68,7 +68,7 @@ Volume Pekerjaan
             <div class="form-row">
               <label class="col-lg-2" for="nilai"> Nilai </label>
               <div class="form-group col-md-8">
-                <input v-model="form.nilai" id="nilai" type="text" min=0 placeholder="Masukkan nilai Volume Pekerjaan"
+                <input v-model="form.nilai" id="nilai" type="number" step="0.001" min=0 placeholder="Masukkan nilai Volume Pekerjaan"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('nilai') }">
                 <has-error :form="form" field="nilai"></has-error>
               </div>
