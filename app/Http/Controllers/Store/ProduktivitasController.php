@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Produktivitas;
 use App\Models\Proyek;
 use App\Models\TipeAlat;
+use App\Models\KebutuhanAlat;
+use DB;
 
 class ProduktivitasController extends Controller
 {
@@ -230,12 +232,59 @@ class ProduktivitasController extends Controller
                 'faktor_efisiensi_kerja' => $request->hydraulic["faktor_efisiensi_kerja"]
             ];
 
-            $produktivitas = Produktivitas::find($id);
-            $produktivitas->id_tipe_alat = $request->id_tipe_alat;
-            $produktivitas->hasil = round($hasil,3);
-            $produktivitas->parameter = json_encode($parameter);
-            $produktivitas->save();
+            DB::beginTransaction();
+
+            try{
+                $produktivitas = Produktivitas::find($id);
+                $produktivitas->id_tipe_alat = $request->id_tipe_alat;
+                $produktivitas->hasil = round($hasil,3);
+                $produktivitas->parameter = json_encode($parameter);
+                $produktivitas->save();
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+            }
             
+
+            /**update kebutuhan alat */
+            $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$request->id_tipe_alat)->first();
+            if($kebutuhanAlat != null){
+                $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                $totalHari= 240;
+                $jamKerja=8;
+                $waktuPelaksanaan= 58;
+
+                $produktivitasPerHari = round($hasil,3) * $parameterDetail->jam_kerja_per_hari;
+                $produktivitasMinHari = $parameterDetail->produktivitas_min_per_hari;
+                $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+
+
+                $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+            
+                $parameter = [
+                    'volume_pekerjaan' => $parameterDetail->volume_pekerjaan,
+                    'produktivitas_per_jam' => $produktivitas->hasil,
+                    'jam_kerja_per_hari' => $jamKerja,
+                    'waktu_pelaksanaan' => $waktuPelaksanaan,
+                    'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
+                    'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                    'jumlah_alat' => round($jumlahAlat,0),
+                    'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
+                ];
+
+                try{
+                    $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                    $kebutuhanAlat->parameter = json_encode($parameter);
+                    $kebutuhanAlat->save();
+                }catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+                }
+                DB::commit();
+                return $produktivitas;
+            }
+            
+            DB::commit();
             return $produktivitas;
         }else if($request->id_jenis_alat[1] == "Dump Truck"){
             $request->validate([
@@ -277,12 +326,57 @@ class ProduktivitasController extends Controller
                 'jumlah_dump_truck' => round($jumlah_dump_truck,0),
                 'job_efficiency' => $request->dump["job_efficiency"],
             ];
+            
+            DB::beginTransaction();
+            try{
+                $produktivitas = Produktivitas::find($id);
+                $produktivitas->id_tipe_alat = $request->id_tipe_alat;
+                $produktivitas->hasil = round($hasil,3);
+                $produktivitas->parameter = json_encode($parameter);
+                $produktivitas->save();
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+            }
 
-            $produktivitas = Produktivitas::find($id);
-            $produktivitas->id_tipe_alat = $request->id_tipe_alat;
-            $produktivitas->hasil = round($hasil,3);
-            $produktivitas->parameter = json_encode($parameter);
-            $produktivitas->save();
+            $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$request->id_tipe_alat)->first();
+            if($kebutuhanAlat != null){
+                $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                $totalHari= 240;
+                $jamKerja=8;
+                $waktuPelaksanaan= 58;
+
+                $produktivitasPerHari = round($hasil,3) * $parameterDetail->jam_kerja_per_hari;
+                $produktivitasMinHari = $parameterDetail->produktivitas_min_per_hari;
+                $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+
+
+                $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+            
+                $parameter = [
+                    'volume_pekerjaan' => $parameterDetail->volume_pekerjaan,
+                    'produktivitas_per_jam' => $produktivitas->hasil,
+                    'jam_kerja_per_hari' => $jamKerja,
+                    'waktu_pelaksanaan' => $waktuPelaksanaan,
+                    'jumlah_fleet' => $parameterDetail->jumlah_fleet,
+                    'jumlah_alat' => round($jumlahAlat,0),
+                    'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
+                ];
+
+                try{
+                    $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                    $kebutuhanAlat->parameter = json_encode($parameter);
+                    $kebutuhanAlat->save();
+                }catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+                }
+                DB::commit();
+                return $produktivitas;
+            }
+            
+            DB::commit();
+            return $produktivitas;
 
             return $produktivitas;
         }else if($request->id_jenis_alat[1] == "Bulldozer"){
@@ -314,12 +408,59 @@ class ProduktivitasController extends Controller
                 'grade_factor' => $request->bulldozer["grade_factor"],
                 'job_efficiency' => $request->bulldozer["job_efficiency"],
             ];
+
+            DB::beginTransaction();
             
-            $produktivitas = Produktivitas::find($id);
-            $produktivitas->id_tipe_alat = $request->id_tipe_alat;
-            $produktivitas->hasil = round($hasil,3);
-            $produktivitas->parameter = json_encode($parameter);
-            $produktivitas->save();
+            try{
+                $produktivitas = Produktivitas::find($id);
+                $produktivitas->id_tipe_alat = $request->id_tipe_alat;
+                $produktivitas->hasil = round($hasil,3);
+                $produktivitas->parameter = json_encode($parameter);
+                $produktivitas->save();
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+            }
+
+            $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$request->id_tipe_alat)->first();
+            if($kebutuhanAlat != null){
+                $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                $totalHari= 240;
+                $jamKerja=8;
+                $waktuPelaksanaan= 58;
+
+                $produktivitasPerHari = round($hasil,3) * $parameterDetail->jam_kerja_per_hari;
+                $produktivitasMinHari = $parameterDetail->produktivitas_min_per_hari;
+                $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+
+
+                $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+            
+                $parameter = [
+                    'volume_pekerjaan' => $parameterDetail->volume_pekerjaan,
+                    'produktivitas_per_jam' => $produktivitas->hasil,
+                    'jam_kerja_per_hari' => $jamKerja,
+                    'waktu_pelaksanaan' => $waktuPelaksanaan,
+                    'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
+                    'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                    'jumlah_alat' => round($jumlahAlat,0),
+                    'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
+                ];
+
+                try{
+                    $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                    $kebutuhanAlat->parameter = json_encode($parameter);
+                    $kebutuhanAlat->save();
+                }catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+                }
+                DB::commit();
+                return $produktivitas;
+            }
+            
+            DB::commit();
+            return $produktivitas;
         }else{
             $request->validate([
                 'compactor.lebar_pemadatan' => 'required',
@@ -342,11 +483,60 @@ class ProduktivitasController extends Controller
             ];
 
             $hasil = (($request->compactor["lebar_blade"]/1000)-$request->compactor["lebar_overlap"]) * $request->compactor["kecepatan_kerja"] * $request->compactor["tebal_lapisan_tanah"] * ($request->compactor["job_efficiency"]/$request->compactor["number_of_trips"]);
-            $produktivitas = Produktivitas::find($id);
-            $produktivitas->id_tipe_alat = $request->id_tipe_alat;
-            $produktivitas->hasil = round($hasil,3);
-            $produktivitas->parameter = json_encode($parameter);
-            $produktivitas->save();;
+            
+            DB::beginTransaction();
+
+            try{
+                $produktivitas = Produktivitas::find($id);
+                $produktivitas->id_tipe_alat = $request->id_tipe_alat;
+                $produktivitas->hasil = round($hasil,3);
+                $produktivitas->parameter = json_encode($parameter);
+                $produktivitas->save();;
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+            }
+
+             /**update kebutuhan alat */
+             $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$request->id_tipe_alat)->first();
+             if($kebutuhanAlat != null){
+                 $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                 $totalHari= 240;
+                 $jamKerja=8;
+                 $waktuPelaksanaan= 58;
+ 
+                 $produktivitasPerHari = round($hasil,3) * $parameterDetail->jam_kerja_per_hari;
+                 $produktivitasMinHari = $parameterDetail->produktivitas_min_per_hari;
+                 $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+ 
+ 
+                 $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+             
+                 $parameter = [
+                     'volume_pekerjaan' => $parameterDetail->volume_pekerjaan,
+                     'produktivitas_per_jam' => $produktivitas->hasil,
+                     'jam_kerja_per_hari' => $jamKerja,
+                     'waktu_pelaksanaan' => $waktuPelaksanaan,
+                     'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
+                     'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                     'jumlah_alat' => round($jumlahAlat,0),
+                     'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
+                 ];
+ 
+                 try{
+                     $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                     $kebutuhanAlat->parameter = json_encode($parameter);
+                     $kebutuhanAlat->save();
+                 }catch (\Exception $e) {
+                     DB::rollback();
+                     return response()->json(['status' => 'Update Produktivitas Fail', 'message' => $e->getMessage()]);
+                 }
+                 DB::commit();
+                 return $produktivitas;
+             }
+             
+             DB::commit();
+             return $produktivitas;
         }
     }
 

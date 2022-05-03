@@ -74,6 +74,7 @@ class KebutuhanAlatController extends Controller
                 'jam_kerja_per_hari' => $jamKerja,
                 'waktu_pelaksanaan' => $waktuPelaksanaan,
                 'jumlah_fleet' => $request->dump["jumlah_fleet"],
+                'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
                 'jumlah_alat' => round($jumlahAlat,0),
             ];
 
@@ -101,6 +102,7 @@ class KebutuhanAlatController extends Controller
                 'waktu_pelaksanaan' => $waktuPelaksanaan,
                 'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
                 'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
                 'jumlah_alat' => round($jumlahAlat,0),
             ];
 
@@ -140,6 +142,7 @@ class KebutuhanAlatController extends Controller
             'jam_kerja_per_hari' => $jamKerja,
             'waktu_pelaksanaan' => $waktuPelaksanaan,
             'jumlah_fleet' => $request->dump["jumlah_fleet"],
+            'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
             'jumlah_alat' => round($jumlahAlat,0),
         ];
 
