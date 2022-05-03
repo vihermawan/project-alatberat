@@ -18,13 +18,19 @@ Biaya Sewa
               <thead>
                   <tr>
                     <th>No</th>
-                    <th>Email</th>
+                    <th>Tipe Alat</th>
+                    <th>Interval</th>
+                    <th>Koefisien</th>
+                    <th>Total Biaya</th>
                     <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
+                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.email}}</td>
                   <td>@{{ item.email}}</td>
                   <td>
                     <a href="javascript:void(0);" @click="editModal(item)" class="text-success"

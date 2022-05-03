@@ -198,13 +198,14 @@ Rekapitulasi
       })
     );
 
-    var dataProduktivitas = {!!json_encode($allKebutuhanAlat)!!}
+    var dataKebutuhanAlat = {!!json_encode($allKebutuhanAlat)!!}
 
     var data = [];
-    for (let produktivitas of dataProduktivitas){
+    for (let kebutuhanAlat of dataKebutuhanAlat){
+        let detailData = JSON.parse(kebutuhanAlat.parameter) 
         data.push({
-            "nama_tipe_alat" : produktivitas.nama_tipe_alat,
-            "hasil" :  produktivitas.hasil,
+            "nama_tipe_alat" : kebutuhanAlat.nama_tipe_alat,
+            "hasil" :  detailData.jumlah_alat,
         })
     }
     
@@ -244,7 +245,6 @@ Rekapitulasi
       });
     
       series.data.setAll(data);
-    
       // Make stuff animate on load
       // https://www.amcharts.com/docs/v5/concepts/animations/
       series.appear();
