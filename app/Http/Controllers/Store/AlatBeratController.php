@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\JenisAlat;
 use App\Models\TipeAlat;
 use App\Models\Proyek;
+use App\Models\KebutuhanAlat;
+use App\Models\VolumePekerjaan;
+use App\Models\Produktivitas;
+use DB;
 
 class AlatBeratController extends Controller
 {
@@ -114,7 +118,95 @@ class AlatBeratController extends Controller
             'sewa_bulanan' => 'required',
         ]);
 
-        return TipeAlat::find($id)->update($request->all());
+        DB::beginTransaction();
+
+        $tipeAlat = TipeAlat::find($id);
+        try {
+            $tipeAlat->nama = $request->nama;
+            $tipeAlat->merk = $request->merk;
+            $tipeAlat->kapasitas_bucket = $request->kapasitas_bucket;
+            $tipeAlat->sewa_bulanan = $request->sewa_bulanan;
+            $tipeAlat->save();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => 'Update Tipe Alat Fail', 'message' => $e->getMessage()], 404);
+        }
+        $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$id)->first();
+        if($kebutuhanAlat != null){
+            $volumePekerjaan = VolumePekerjaan::where('id', $kebutuhanAlat->id_volume_pekerjaan)->first();
+           
+            $produktivitas = Produktivitas::where('id_tipe_alat', $id)->first();
+
+            $jenisAlat = JenisAlat::where('id',$tipeAlat->id_jenis_alat)->first();
+
+            $jamKerja = 8;
+            $totalHari = 240;
+            $waktuPelaksanaan = 58;
+
+            if($jenisAlat->nama == "Dump Truck"){
+                $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                
+                $parameter = [
+                    'volume_pekerjaan' => $volumePekerjaan->nilai,
+                    'produktivitas_per_jam' => $produktivitas->hasil,
+                    'jam_kerja_per_hari' => $jamKerja,
+                    'waktu_pelaksanaan' => $waktuPelaksanaan,
+                    'jumlah_fleet' => $parameterDetail->jumlah_fleet,
+                    'harga_sewa' => round($request->sewa_bulanan/$totalHari,0),
+                    'jumlah_alat' => $parameterDetail->jumlah_alat,
+                ];
+    
+                $biayaSewaPerJam = $parameterDetail->jumlah_alat * round($request->sewa_bulanan/$totalHari,0);
+    
+                try {
+                    $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                    $kebutuhanAlat->parameter = json_encode($parameter);
+                    $kebutuhanAlat->save();
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'Update Tipe Alat Fail', 'message' => $e->getMessage()], 404);
+                }
+
+                //next update biaya operasional
+
+                DB::commit();
+                return $tipeAlat;
+            }else{
+                $produktivitasPerHari = $produktivitas->hasil * $jamKerja;
+                $produktivitasMinHari = $volumePekerjaan->nilai/$waktuPelaksanaan;
+                $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
+
+                $biayaSewaPerJam = round($jumlahAlat,0) * round($request->sewa_bulanan/$totalHari,0);
+
+                $parameter = [
+                    'volume_pekerjaan' => $volumePekerjaan->nilai,
+                    'produktivitas_per_jam' => $produktivitas->hasil,
+                    'jam_kerja_per_hari' => $jamKerja,
+                    'waktu_pelaksanaan' => $waktuPelaksanaan,
+                    'produktivitas_alat_per_hari' => round($produktivitasPerHari,2),
+                    'produktivitas_min_per_hari' => round($produktivitasMinHari,2),
+                    'harga_sewa' => round($tipeAlat->sewa_bulanan/$totalHari,0),
+                    'jumlah_alat' => round($jumlahAlat,0),
+                ];
+    
+                try {
+                    $kebutuhanAlat->hasil = $biayaSewaPerJam;
+                    $kebutuhanAlat->parameter = json_encode($parameter);
+                    $kebutuhanAlat->save();
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'Update Tipe Alat Fail', 'message' => $e->getMessage()], 404);
+                }
+
+                //next update biaya operasional
+               
+                DB::commit();
+                return $tipeAlat;
+            }
+
+        }
+        DB::commit();
+        return $tipeAlat;
     }
 
     public function destroyTipeAlat($id)

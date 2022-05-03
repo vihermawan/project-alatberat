@@ -196,7 +196,7 @@ Tipe Alat Berat
       },
       storeData(){
         let data = $("#sewa_bulanan ").val().split(" ")
-        let result = data[1].replace(".","")
+        let result = data[1].replaceAll(".","")
         this.form.sewa_bulanan = new Number(result)
         this.form.post("{{ route('tipeAlat.store') }}")
         .then(response => {
@@ -215,6 +215,9 @@ Tipe Alat Berat
       },
       updateData(){
         url = "{{ route('tipeAlat.update', ':id') }}".replace(':id', this.form.id)
+        let data = $("#sewa_bulanan ").val().split(" ")
+        let result = data[1].replaceAll(".","")
+        this.form.sewa_bulanan = new Number(result)
         this.form.put(url)
         .then(response => {
           $('#modal').modal('hide');

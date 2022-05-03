@@ -112,6 +112,8 @@ class VolumeController extends Controller
                 DB::rollback();
                 return response()->json(['status' => 'Update Volume Fail', 'message' => $e->getMessage()]);
             }
+
+            //next update biaya operasional
             DB::commit();
             return $kebutuhanAlat;
             

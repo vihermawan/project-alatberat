@@ -154,6 +154,8 @@ class KebutuhanAlatController extends Controller
         $kebutuhanAlat->hasil = $biayaSewaPerJam;
         $kebutuhanAlat->parameter = json_encode($parameter);
         $kebutuhanAlat->save();
+
+        //next update biaya operasional
         
         return $kebutuhanAlat;
     }
