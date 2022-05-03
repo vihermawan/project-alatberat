@@ -47,6 +47,14 @@
       max-height: 250px;
       overflow-x: hidden;
     }
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+    #chartdiv2 {
+      width: 100%;
+      height: 500px;
+    }
   </style>
 </head>
 
