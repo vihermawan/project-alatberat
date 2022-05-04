@@ -82,7 +82,14 @@ Route::post('/create-kebutuhan-alat',[KebutuhanAlatController::class, 'store'])-
 Route::get('/all-kebutuhan-alat',[KebutuhanAlatController::class, 'listkebutuhanAlat'])->name('kebutuhanAlat.list');
 Route::delete('/delete-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'destroy'])->name('kebutuhanAlat.destroy');
 Route::put('/update-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'update'])->name('kebutuhanAlat.update');
-Route::get('/filter-tipe-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'filterkebutuhanAlat'])->name('kebutuhanAlat.filter');
+Route::get('/filter-kebutuhan-alat/{id}',[KebutuhanAlatController::class, 'filterkebutuhanAlat'])->name('kebutuhanAlat.filter');
+
+/*biaya operasional */
+Route::post('/create-biaya-operasional',[BiayaOperasionalController::class, 'store'])->name('biayaOperasional.store');
+Route::get('/all-biaya-operasional',[BiayaOperasionalController::class, 'listBiayaOperasional'])->name('biayaOperasional.list');
+Route::delete('/delete-biaya-operasional/{id}',[BiayaOperasionalController::class, 'destroy'])->name('biayaOperasional.destroy');
+Route::put('/update-biaya-operasional/{id}',[BiayaOperasionalController::class, 'update'])->name('biayaOperasional.update');
+Route::get('/filter-biaya-operasional/{id}',[BiayaOperasionalController::class, 'filterBiayaOperasional'])->name('biayaOperasional.filter');
 
 /*admin */
 Route::post('/create-admin',[AdminController::class, 'store'])->name('admin.store');
