@@ -5,8 +5,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.kapasitas_dump" id="kapasitas_dump" type="number" step="0.01" placeholder="Masukkan kapasitas dump"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('kapasitas_dump') }">
-          <has-error :form="form" field="kapasitas_dump"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.kapasitas_dump') }">
+          <div class="invalid-feedback">
+            Kapasitas dump required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m<sup> 3</sup></small>
@@ -19,9 +21,11 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.dump.bucket_fill_factor" id="bucket_fill_factor" type="number" step="0.01" placeholder="Masukkan bucket fill factor"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('bucket_fill_factor') }">
-          <has-error :form="form" field="bucket_fill_factor"></has-error>
+            <input v-model="form.dump.bucket_fill_factor" id="bucket_fill_factor" type="number" step="0.01" placeholder="Masukkan bucket fill factor"
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.bucket_fill_factor') }">
+            <div class="invalid-feedback">
+              Bucket fill factor required
+            </div>
         </div>
       </div>
     </div>
@@ -31,9 +35,11 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.dump.cycle_time_excavator" id="cycle_time_excavator" type="number" step="0.0001" placeholder="Masukkan cycle time excavator"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('cycle_time_excavator') }">
-          <has-error :form="form" field="cycle_time_excavator"></has-error>
+            <input v-model="form.dump.cycle_time_excavator" id="cycle_time_excavator" type="number" step="0.0001" placeholder="Masukkan cycle time excavator"
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.cycle_time_excavator') }">
+            <div class="invalid-feedback">
+              Cycle time excavator required
+            </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">menit</small>
@@ -47,8 +53,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.jarak_angkut" id="jarak_angkut" type="number" step="0.01" placeholder="Masukkan jarak angkut"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('jarak_angkut') }">
-          <has-error :form="form" field="jarak_angkut"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.jarak_angkut') }">
+          <div class="invalid-feedback">
+            Jarak angkut required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">meter</small>
@@ -62,8 +70,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.loaded_speed" id="loaded_speed" type="number" step="0.01" placeholder="Masukkan loaded speed"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('loaded_speed') }">
-          <has-error :form="form" field="loaded_speed"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.loaded_speed') }">
+          <div class="invalid-feedback">
+            Loaded speed required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m/menit</small>
@@ -77,8 +87,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.empty_speed" id="empty_speed" type="number" step="0.01" placeholder="Masukkan empty speed"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('empty_speed') }">
-          <has-error :form="form" field="empty_speed"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.empty_speed') }">
+          <div class="invalid-feedback">
+            Empty speed required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m/menit</small>
@@ -92,8 +104,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.standby_dumping_time" id="standby_dumping_time" type="number" step="0.01" placeholder="Masukkan standby dumping time"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('standby_dumping_time') }">
-          <has-error :form="form" field="standby_dumping_time"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.standby_dumping_time') }">
+          <div class="invalid-feedback">
+            Stanby dumping time required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">menit</small>
@@ -107,8 +121,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.spot_delay_time" id="spot_delay_time" type="number" step="0.01" placeholder="Masukkan spot delay time"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('spot_delay_time') }">
-          <has-error :form="form" field="spot_delay_time"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.spot_delay_time') }">
+          <div class="invalid-feedback">
+            Spot delay time required
+          </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">menit</small>
@@ -122,8 +138,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.dump.job_efficiency" id="job_efficiency" type="number" step="0.01" placeholder="Masukkan job efficiency"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('job_efficiency') }">
-          <has-error :form="form" field="job_efficiency"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('dump.job_efficiency') }">
+          <div class="invalid-feedback">
+            Job efficiency required
+          </div>
         </div>
       </div>
     </div>

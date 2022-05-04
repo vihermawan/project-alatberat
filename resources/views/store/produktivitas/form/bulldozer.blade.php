@@ -5,8 +5,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.bulldozer.kapasitas_blade" id="kapasitas_blade" type="number" step="0.01" placeholder="Masukkan kapasitas blade"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('kapasitas_blade') }">
-          <has-error :form="form" field="kapasitas_blade"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.kapasitas_blade') }">
+         <div class="invalid-feedback">
+          Kapsitas blade required
+         </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m<sup> 3</sup></small>
@@ -20,8 +22,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.bulldozer.blade_factor" id="blade_factor" type="number" step="0.01" placeholder="Masukkan bucket fill factor"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('blade_factor') }">
-          <has-error :form="form" field="blade_factor"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.blade_factor') }">
+            <div class="invalid-feedback">
+                Blade factor required
+             </div>
         </div>
       </div>
     </div>
@@ -32,8 +36,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.bulldozer.jarak_dorong" id="jarak_dorong" type="number" step="0.01" placeholder="Masukkan jarak dorong"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('jarak_dorong') }">
-          <has-error :form="form" field="jarak_dorong"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.jarak_dorong') }">
+           <div class="invalid-feedback">
+              Jarak dorong required
+           </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">meter</small>
@@ -46,9 +52,11 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.bulldozer.fordward_speed" id="fordward_speed" type="number" step="0.01" placeholder="Masukkan fordward speed"
+            <input v-model="form.bulldozer.fordward_speed" id="bulldozer.fordward_speed" type="number" step="0.01" placeholder="Masukkan fordward speed"
               class="form-control" :class="{ 'is-invalid': form.errors.has('fordward_speed') }">
-          <has-error :form="form" field="fordward_speed"></has-error>
+            <div class="invalid-feedback">
+             Fordward speed required
+            </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m/menit</small>
@@ -61,9 +69,11 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.bulldozer.reverse_speed" id="reverse_speed" type="number" step="0.01" placeholder="Masukkan reverse speed"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('reverse_speed') }">
-          <has-error :form="form" field="reverse_speed"></has-error>
+            <input v-model="form.bulldozer.reverse_speed" id="reverse_speed" type="number" step="0.01" placeholder="Masukkan reverse speed"
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.reverse_speed') }">
+            <div class="invalid-feedback">
+              Reverse speed required
+            </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">m/menit</small>
@@ -76,9 +86,11 @@
     <div class="form-group col-md-10">
       <div class="row">
         <div class="col-md-10">
-          <input v-model="form.bulldozer.gear_shifting" id="gear_shifting" type="number" step="0.01" placeholder="Masukkan gear shifting time"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('gear_shifting') }">
-          <has-error :form="form" field="gear_shifting"></has-error>
+            <input v-model="form.bulldozer.gear_shifting" id="gear_shifting" type="number" step="0.01" placeholder="Masukkan gear shifting time"
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.gear_shifting') }">
+            <div class="invalid-feedback">
+              Gear shifting required
+            </div>
         </div>
         <div class="col-md-2 block-tag">
             <small class="badge badge-default badge-success text-white">menit</small>
@@ -92,8 +104,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.bulldozer.grade_factor" id="grade_factor" type="number" step="0.01" placeholder="Masukkan grade factor"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('grade_factor') }">
-          <has-error :form="form" field="grade_factor"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.grade_factor') }">
+          <div class="invalid-feedback">
+            Grade factor required
+          </div>
         </div>
       </div>
     </div>
@@ -104,8 +118,10 @@
       <div class="row">
         <div class="col-md-10">
           <input v-model="form.bulldozer.job_efficiency" id="job_efficiency" type="number" step="0.01" placeholder="Masukkan job efficiency"
-              class="form-control" :class="{ 'is-invalid': form.errors.has('job_efficiency') }">
-          <has-error :form="form" field="job_efficiency"></has-error>
+              class="form-control" :class="{ 'is-invalid': form.errors.has('bulldozer.job_efficiency') }">
+          <div class="invalid-feedback">
+            Job efficiency required
+          </div>
         </div>
       </div>
     </div>

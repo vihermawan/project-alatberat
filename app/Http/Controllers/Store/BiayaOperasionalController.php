@@ -37,7 +37,11 @@ class BiayaOperasionalController extends Controller
 
     public function store(Request $request)
     {   
+        $request->validate([
+            'hydraulic.bahan_bakar.interval' => 'required',
+        ]);
 
+        dd($request);
     }
 
     public function update(Request $request, $id)

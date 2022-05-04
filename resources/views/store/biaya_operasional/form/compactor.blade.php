@@ -8,9 +8,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.bahan_bakar.harga_satuan" id="harga_satuan"
-                  :class="{ 'is-invalid': form.errors.has('harga_satuan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.bahan_bakar.harga_satuan') }"
                   placeholder="Masukkan harga satuan bahan bakar">
-                  <has-error :form="form" field="harga_satuan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga satuan required
+                  </div>
               </div>
             </div>
           </div>   
@@ -20,9 +22,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.bahan_bakar.daya_mesin" id="daya_mesin"
-                  :class="{ 'is-invalid': form.errors.has('daya_mesin') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.bahan_bakar.daya_mesin') }"    
                   placeholder="Masukan daya mesin bahan bakar">
-                  <has-error :form="form" field="daya_mesin"></has-error>
+                  <div class="invalid-feedback">
+                    Daya mesin required
+                  </div>
               </div>
             </div>
           </div>
@@ -32,9 +36,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.bahan_bakar.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.bahan_bakar.interval') }"    
                   placeholder="Masukan interval bahan bakar">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -51,9 +57,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_engine.harga_satuan" id="harga_satuan"
-                  :class="{ 'is-invalid': form.errors.has('harga_satuan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_engine.harga_satuan') }"
                   placeholder="Masukkan harga satuan oil engine">
-                  <has-error :form="form" field="harga_satuan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga satuan required
+                  </div>
               </div>
             </div>
           </div>
@@ -61,9 +69,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_engine.liter_pemakaian" id="liter_pemakaian"
-                  :class="{ 'is-invalid': form.errors.has('liter_pemakaian') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_engine.liter_pemakaian') }"    
                   placeholder="Masukan liter pemakaian oil engine">
-                  <has-error :form="form" field="liter_pemakaian"></has-error>
+                  <div class="invalid-feedback">
+                    Liter pemakaian required
+                  </div>
               </div>
             </div>
           </div>
@@ -73,9 +83,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_engine.faktor_efisien" id="faktor_efisien"
-                  :class="{ 'is-invalid': form.errors.has('faktor_efisien') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_engine.faktor_efisien') }"    
                   placeholder="Masukan faktor efisien oil engine">
-                  <has-error :form="form" field="faktor_efisien"></has-error>
+                  <div class="invalid-feedback">
+                    Faktor pemakaian required
+                  </div>
               </div>
             </div>
           </div>
@@ -83,9 +95,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_engine.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_engine.interval') }"    
                   placeholder="Masukan interval oil engine">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -102,9 +116,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_hidrolik.harga_satuan" id="harga_satuan"
-                  :class="{ 'is-invalid': form.errors.has('harga_satuan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_hidrolik.harga_satuan') }"
                   placeholder="Masukkan harga satuan oil hidrolik">
-                  <has-error :form="form" field="harga_satuan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga satuan required
+                  </div>
               </div>
             </div>
           </div>
@@ -114,9 +130,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_hidrolik.daya_mesin" id="daya_mesin"
-                  :class="{ 'is-invalid': form.errors.has('daya_mesin') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_hidrolik.daya_mesin') }"    
                   placeholder="Masukan daya mesin oil hidrolik">
-                  <has-error :form="form" field="daya_mesin"></has-error>
+                  <div class="invalid-feedback">
+                    Daya mesin required
+                  </div>
               </div>
             </div>
           </div>
@@ -126,9 +144,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.oil_hidrolik.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.oil_hidrolik.interval') }"    
                   placeholder="Masukan interval oil hidrolik">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -145,9 +165,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.engine_oil_filter.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.engine_oil_filter.koefisien') }"
                   placeholder="Masukkan koefisien engine oil filter">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -157,9 +179,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.engine_oil_filter.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.engine_oil_filter.interval') }"    
                   placeholder="Masukan interval engine oil filter">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -176,9 +200,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_filter_element.harga_bulanan" id="harga_bulanan"
-                  :class="{ 'is-invalid': form.errors.has('harga_bulanan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_filter_element.harga_bulanan') }"
                   placeholder="Masukkan harga bulanan fuel filter element">
-                  <has-error :form="form" field="harga_bulanan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga bulanan required
+                  </div>
               </div>
             </div>
           </div>
@@ -188,9 +214,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_filter_element.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_filter_element.interval') }"    
                   placeholder="Masukan interval fuel filter element">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -208,9 +236,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_water_separator.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_water_separator.koefisien') }"
                   placeholder="Masukkan koefisien fuel water separator">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -220,9 +250,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_water_separator.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_water_separator.interval') }"    
                   placeholder="Masukan interval fuel water separator">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -240,9 +272,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_filter.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_filter.koefisien') }"
                   placeholder="Masukkan koefisien fuel filter">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -252,9 +286,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.fuel_filter.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.fuel_filter.interval') }"    
                   placeholder="Masukan interval fuel filter">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -271,9 +307,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.hydraulic_filter.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.hydraulic_filter.koefisien') }"
                   placeholder="Masukkan koefisien hydraulic filter">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -283,9 +321,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.hydraulic_filter.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.hydraulic_filter.interval') }"    
                   placeholder="Masukan interval hydraulic filter">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -302,9 +342,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.air_cleaner_inner.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.air_cleaner_inner.koefisien') }"
                   placeholder="Masukkan koefisien air cleaner inner">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -314,9 +356,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.air_cleaner_inner.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.air_cleaner_inner.interval') }"    
                   placeholder="Masukan interval air cleaner_inner">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -333,9 +377,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.air_cleaner_outer.koefisien" id="koefisien"
-                  :class="{ 'is-invalid': form.errors.has('koefisien') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.air_cleaner_outer.koefisien') }"
                   placeholder="Masukkan koefisien air cleaner outer">
-                  <has-error :form="form" field="koefisien"></has-error>
+                  <div class="invalid-feedback"> 
+                    Koefisien required
+                  </div>
               </div>
             </div>
           </div>
@@ -345,9 +391,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.air_cleaner_outer.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.air_cleaner_outer.interval') }"    
                   placeholder="Masukan interval air cleaner outer">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -364,9 +412,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.grase.harga_bulanan" id="harga_bulanan"
-                  :class="{ 'is-invalid': form.errors.has('harga_bulanan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.grase.harga_bulanan') }"
                   placeholder="Masukkan harga bulanan grase">
-                  <has-error :form="form" field="harga_bulanan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga bulanan required
+                  </div>
               </div>
             </div>
           </div>
@@ -376,9 +426,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.grase.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.grase.interval') }"    
                   placeholder="Masukan interval grase">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>
@@ -395,9 +447,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.gaji_operator.harga_bulanan" id="harga_bulanan"
-                  :class="{ 'is-invalid': form.errors.has('harga_bulanan') }"
+                  :class="{ 'is-invalid': form.errors.has('compactor.gaji_operator.harga_bulanan') }"
                   placeholder="Masukkan harga bulanan gaji operator">
-                  <has-error :form="form" field="harga_bulanan"></has-error>
+                  <div class="invalid-feedback">
+                    Harga bulanan required
+                  </div>
               </div>
             </div>
           </div>
@@ -407,9 +461,11 @@
             <div class="col-md-10">
               <div class="form-group">
                   <input type="number" step="0.01" class="form-control" v-model="form.compactor.gaji_operator.interval" id="interval"
-                  :class="{ 'is-invalid': form.errors.has('interval') }"    
+                  :class="{ 'is-invalid': form.errors.has('compactor.gaji_operator.interval') }"    
                   placeholder="Masukan interval gaji operator">
-                  <has-error :form="form" field="interval"></has-error>
+                  <div class="invalid-feedback">
+                    Interval required
+                  </div>
               </div>
             </div>
           </div>

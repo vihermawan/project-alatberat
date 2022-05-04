@@ -436,7 +436,21 @@ Biaya Operasional
         $('#modal').modal('show');
       },
       storeData(){
-        console.log('this.form',this.form.id_proyek)
+        this.form.post("{{ route('biayaOperasional.store') }}")
+        .then(response => {
+          $('#modal').modal('hide');
+          Swal.fire(
+              'Berhasil',
+              'Data biaya operasional berhasil ditambahkan',
+              'success'
+          )
+
+          this.emptyFilter()
+          this.refreshData()
+        })
+        .catch(e => {
+            e.response.status != 422 ? console.log(e) : '';
+        })
       },
       updateData(){
 
