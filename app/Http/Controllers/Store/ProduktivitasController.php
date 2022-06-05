@@ -344,16 +344,12 @@ class ProduktivitasController extends Controller
             $kebutuhanAlat = KebutuhanAlat::where('id_tipe_alat',$request->id_tipe_alat)->first();
             if($kebutuhanAlat != null){
                 $parameterDetail = json_decode($kebutuhanAlat->parameter);
+                dd($parameterDetail);
                 $totalHari= 240;
                 $jamKerja=8;
                 $waktuPelaksanaan= 58;
 
-                $produktivitasPerHari = round($hasil,3) * $parameterDetail->jam_kerja_per_hari;
-                $produktivitasMinHari = $parameterDetail->produktivitas_min_per_hari;
-                $jumlahAlat = round($produktivitasMinHari,2)/round($produktivitasPerHari,2);
-
-
-                $biayaSewaPerJam = round($jumlahAlat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
+                $biayaSewaPerJam = round($parameterDetail->jumlah_alat,0) * round($tipeAlat->sewa_bulanan/$totalHari,0);
             
                 $parameter = [
                     'volume_pekerjaan' => $parameterDetail->volume_pekerjaan,

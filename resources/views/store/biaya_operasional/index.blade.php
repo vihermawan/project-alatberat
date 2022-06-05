@@ -224,7 +224,7 @@ Biaya Operasional
             interval : '',
           },
           fuel_filter_element: {
-            harga_bulanan:'',
+            koefisien:'',
             interval : '',
           },
           final_drive_oil : {
@@ -237,6 +237,10 @@ Biaya Operasional
           },
           air_cleaner_outer: {
             koefisien :'',
+            interval: '',
+          },
+          fuel_main_filter: {
+            harga_bulanan :'',
             interval: '',
           },
           grase : {
@@ -282,7 +286,7 @@ Biaya Operasional
             interval: '',
           },
           fuel_filter_element : {
-            harga_bulanan : '',
+            koefisien : '',
             interval : '',
           },
           air_cleaner_inner: {
@@ -290,6 +294,10 @@ Biaya Operasional
             interval: '',
           },
           air_cleaner_outer: {
+            koefisien: '',
+            interval: '',
+          },
+          fuel_main_filter: {
             koefisien :'',
             interval: '',
           },
@@ -332,7 +340,7 @@ Biaya Operasional
             interval: '',
           },
           fuel_filter_element : {
-            harga_bulanan : '',
+            koefisien : '',
             interval : '',
           },
           air_cleaner_inner: {
@@ -370,11 +378,11 @@ Biaya Operasional
             interval : '',
           },
           engine_oil_filter: {
-            harga_bulanan : '',
+            koefisien : '',
             interval : '',
           },
           fuel_filter_element : {
-            harga_bulanan : '',
+            koefisien : '',
             interval : '',
           },
           fuel_water_separator: {
@@ -416,9 +424,146 @@ Biaya Operasional
       dumpMode:false,
       bulldozerMode:false,
       compactorMode:false,
+      hargaSatuan:'',
     },
     mounted() {
       this.refreshData()
+    },
+    watch:{
+      'form.bulldozer.bahan_bakar.harga_satuan'(newVal){
+        this.form.bulldozer.bahan_bakar.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.oil_engine.harga_satuan'(newVal){
+        this.form.bulldozer.oil_engine.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.oil_hidrolik.harga_satuan'(newVal){
+        this.form.bulldozer.oil_hidrolik.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.fuel_filter_element.koefisien'(newVal){
+        this.form.bulldozer.fuel_filter_element.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.grase.harga_bulanan'(newVal){
+        this.form.bulldozer.grase.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.gaji_operator.harga_bulanan'(newVal){
+        this.form.bulldozer.gaji_operator.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.engine_oil_filter.koefisien'(newVal){
+        this.form.bulldozer.engine_oil_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.pre_fuel_filter.koefisien'(newVal){
+        this.form.bulldozer.pre_fuel_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.air_cleaner_inner.koefisien'(newVal){
+        this.form.bulldozer.air_cleaner_inner.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.bulldozer.air_cleaner_outer.koefisien'(newVal){
+        this.form.bulldozer.air_cleaner_outer.koefisien = formatRupiah(newVal,"Rp ")
+      },
+
+      'form.compactor.bahan_bakar.harga_satuan'(newVal){
+        this.form.compactor.bahan_bakar.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.oil_engine.harga_satuan'(newVal){
+        this.form.compactor.oil_engine.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.oil_hidrolik.harga_satuan'(newVal){
+        this.form.compactor.oil_hidrolik.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.fuel_filter_element.koefisien'(newVal){
+        this.form.compactor.fuel_filter_element.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.grase.harga_bulanan'(newVal){
+        this.form.compactor.grase.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.gaji_operator.harga_bulanan'(newVal){
+        this.form.compactor.gaji_operator.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.engine_oil_filter.koefisien'(newVal){
+        this.form.compactor.engine_oil_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.fuel_water_separator.koefisien'(newVal){
+        this.form.compactor.fuel_water_separator.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.fuel_filter.koefisien'(newVal){
+        this.form.compactor.fuel_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.hydraulic_filter.koefisien'(newVal){
+        this.form.compactor.hydraulic_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.compactor.air_cleaner_inner.koefisien'(newVal){
+        this.form.compactor.air_cleaner_inner.koefisien = formatRupiah(newVal,"Rp ")
+      },
+
+
+      'form.dump.bahan_bakar.harga_satuan'(newVal){
+        this.form.dump.bahan_bakar.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.oil_engine.harga_satuan'(newVal){
+        this.form.dump.oil_engine.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.oil_hidrolik.harga_satuan'(newVal){
+        this.form.dump.oil_hidrolik.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.fuel_filter_element.koefisien'(newVal){
+        this.form.dump.fuel_filter_element.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.grase.harga_bulanan'(newVal){
+        this.form.dump.grase.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.gaji_operator.harga_bulanan'(newVal){
+        this.form.dump.gaji_operator.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.oil_transmisi.koefisien'(newVal){
+        this.form.dump.oil_transmisi.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.oil_power_dteering.koefisien'(newVal){
+        this.form.dump.oil_power_dteering.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.engine_oil_filter.koefisien'(newVal){
+        this.form.dump.engine_oil_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.pre_fuel_filter.koefisien'(newVal){
+        this.form.dump.pre_fuel_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.dump.tire_cost.koefisien'(newVal){
+        this.form.dump.tire_cost.koefisien = formatRupiah(newVal,"Rp ")
+      },
+
+      'form.hydraulic.bahan_bakar.harga_satuan'(newVal){
+        this.form.hydraulic.bahan_bakar.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.oil_engine.harga_satuan'(newVal){
+        this.form.hydraulic.oil_engine.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.oil_hidrolik.harga_satuan'(newVal){
+        this.form.hydraulic.oil_hidrolik.harga_satuan = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.fuel_filter_element.koefisien'(newVal){
+        this.form.hydraulic.fuel_filter_element.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.grase.harga_bulanan'(newVal){
+        this.form.hydraulic.grase.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.gaji_operator.harga_bulanan'(newVal){
+        this.form.hydraulic.gaji_operator.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.engine_oil_filter.koefisien'(newVal){
+        this.form.hydraulic.engine_oil_filter.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.final_drive_oil.koefisien'(newVal){
+        this.form.hydraulic.final_drive_oil.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.air_cleaner_inner.koefisien'(newVal){
+        this.form.hydraulic.air_cleaner_inner.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.air_cleaner_outer.koefisien'(newVal){
+        this.form.hydraulic.air_cleaner_outer.koefisien = formatRupiah(newVal,"Rp ")
+      },
+      'form.hydraulic.fuel_main_filter.harga_bulanan'(newVal){
+        this.form.hydraulic.fuel_main_filter.harga_bulanan = formatRupiah(newVal,"Rp ")
+      },
+      
     },
     methods: {
       createModal(){
@@ -544,5 +689,22 @@ Biaya Operasional
       },
     },
   })
+</script>
+<script>
+  function formatRupiah(angka, prefix){
+      var number_string = angka.replace(/[^,\d]/g, '').toString(),
+      split      = number_string.split(','),
+      sisa       = split[0].length % 3,
+      rupiah     = split[0].substr(0, sisa),
+      ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+          
+      if (ribuan) {
+          separator = sisa ? '.' : '';
+          rupiah += separator + ribuan.join('.');
+      }
+      
+      rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+      return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+  }
 </script>
 @endpush

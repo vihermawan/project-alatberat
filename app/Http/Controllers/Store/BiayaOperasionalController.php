@@ -37,13 +37,296 @@ class BiayaOperasionalController extends Controller
 
     public function store(Request $request)
     {   
-        $request->validate([
-            'hydraulic.bahan_bakar.interval' => 'required',
-        ]);
+        if($request->id_jenis_alat[1] == "Hydraulic Excavator"){
+            $request->validate([
+                'hydraulic.bahan_bakar.harga_satuan' => 'required',
+                'hydraulic.bahan_bakar.daya_mesin' => 'required',
+                'hydraulic.bahan_bakar.interval' => 'required',
+                'hydraulic.oil_engine.harga_satuan' => 'required',
+                'hydraulic.oil_engine.liter_pemakaian' => 'required',
+                'hydraulic.oil_engine.faktor_efisien' => 'required',
+                'hydraulic.oil_engine.interval' => 'required',
+                'hydraulic.oil_hidrolik.harga_satuan' => 'required',
+                'hydraulic.oil_hidrolik.daya_mesin' => 'required',
+                'hydraulic.oil_hidrolik.interval' => 'required',
+                'hydraulic.engine_oil_filter.koefisien' => 'required',
+                'hydraulic.engine_oil_filter.interval' => 'required',
+                'hydraulic.fuel_filter_element.koefisien' => 'required',
+                'hydraulic.fuel_filter_element.interval' => 'required',
+                'hydraulic.final_drive_oil.koefisien' => 'required',
+                'hydraulic.final_drive_oil.interval' => 'required',
+                'hydraulic.air_cleaner_inner.koefisien' => 'required',
+                'hydraulic.air_cleaner_inner.interval' => 'required',
+                'hydraulic.air_cleaner_outer.koefisien' => 'required',
+                'hydraulic.air_cleaner_outer.interval' => 'required',
+                'hydraulic.grase.harga_bulanan' => 'required',
+                'hydraulic.grase.interval' => 'required',
+                'hydraulic.gaji_operator.harga_bulanan' => 'required',
+                'hydraulic.gaji_operator.interval' => 'required',
+            ]);
 
-        dd($request);
+            $koefisienBahanBakar = 70/100 * 0.2 * preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["bahan_bakar"]["harga_satuan"]) *  $request->hydraulic["bahan_bakar"]["daya_mesin"];
+            $koefisienOilEngine = ($request->hydraulic["oil_engine"]["faktor_efisien"]/195.5 + $request->hydraulic["oil_engine"]["liter_pemakaian"]/250) * preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["oil_engine"]["harga_satuan"]);
+            $koefisienOilHidrolik = (1.2 *$request->hydraulic["oil_hidrolik"]["daya_mesin"]/2000) * preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["oil_hidrolik"]["harga_satuan"]);
+            $koefisienMainFuelFilter = preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["fuel_main_filter"]["harga_bulanan"])/1000;
+            $koefisienGrase = preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["grase"]["harga_bulanan"])/8;
+            $koefisienGajiOperator = preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["gaji_operator"]["harga_bulanan"])/240;
+            $parameter = [
+                'koefisienBahanBakar' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienBahanBakar,0))),3))),
+                'intervalBahanBakar' => $request->hydraulic["bahan_bakar"]["interval"],
+                'koefisienOilEngine' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilEngine,0))),3))),
+                'intervalOilEngine' => $request->hydraulic["oil_engine"]["interval"],
+                'koefisienOilHidrolik' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilHidrolik,0))),3))),
+                'intervalOilHidrolik' => $request->hydraulic["oil_hidrolik"]["interval"],
+                'koefisienEngineOilFlter' => $request->hydraulic["engine_oil_filter"]["koefisien"],
+                'intervalEngineOilFilter' => $request->hydraulic["engine_oil_filter"]["interval"],
+                'koefisienFuelFilter' =>  $request->hydraulic["fuel_filter_element"]["koefisien"],
+                'intervalFuelFilter' => $request->hydraulic["fuel_filter_element"]["interval"],
+                'koefisienFinalDriveOil' => $request->hydraulic["final_drive_oil"]["koefisien"],
+                'intervalFinalDriveOil' => $request->hydraulic["final_drive_oil"]["interval"],
+                'koefisienAirCleanerInner' => $request->hydraulic["air_cleaner_inner"]["koefisien"],
+                'intervalAirCleanerInner' => $request->hydraulic["air_cleaner_inner"]["interval"],
+                'koefisienAirCleanerOuter' => $request->hydraulic["air_cleaner_outer"]["koefisien"],
+                'intervalAirCleanerOuter' => $request->hydraulic["air_cleaner_outer"]["interval"],
+                'koefisienFuelMainFilter' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienMainFuelFilter,0))),3))),
+                'intervalFuelMainFilter' => $request->hydraulic["fuel_main_filter"]["interval"],
+                'koefisienGrase' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGrase,0))),3))),
+                'intervalGrase' => $request->hydraulic["grase"]["interval"],
+                'koefisienGajiOperator' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGajiOperator,0))),3))),
+                'intervalGajiOperator' => $request->hydraulic["gaji_operator"]["interval"],
+            ];
+            $hasil = round($koefisienBahanBakar,0) + round($koefisienOilEngine,0) + round($koefisienOilHidrolik,0) + preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["engine_oil_filter"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["fuel_filter_element"]["koefisien"]) + preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["final_drive_oil"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["air_cleaner_inner"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->hydraulic["air_cleaner_outer"]["koefisien"])
+                     +round($koefisienMainFuelFilter,0)+round($koefisienGrase,0)+round($koefisienGajiOperator,0);
+
+            $biayaOperasional = New BiayaOperasional;
+            $biayaOperasional->id_tipe_alat = $request->id_tipe_alat;
+            $biayaOperasional->hasil = $hasil;
+            $biayaOperasional->parameter = json_encode($parameter);
+            $biayaOperasional->save();
+        }else if($request->id_jenis_alat[1] == "Dump Truck"){
+            $request->validate([
+                'dump.bahan_bakar.harga_satuan' => 'required',
+                'dump.bahan_bakar.daya_mesin' => 'required',
+                'dump.bahan_bakar.interval' => 'required',
+                'dump.oil_engine.harga_satuan' => 'required',
+                'dump.oil_engine.liter_pemakaian' => 'required',
+                'dump.oil_engine.faktor_efisien' => 'required',
+                'dump.oil_engine.interval' => 'required',
+                'dump.oil_hidrolik.harga_satuan' => 'required',
+                'dump.oil_hidrolik.daya_mesin' => 'required',
+                'dump.oil_hidrolik.interval' => 'required',
+                'dump.oil_transmisi.koefisien' => 'required',
+                'dump.oil_transmisi.interval' => 'required',
+                'dump.oil_power_dteering.koefisien' => 'required',
+                'dump.oil_power_dteering.interval' => 'required',
+                'dump.engine_oil_filter.koefisien' => 'required',
+                'dump.engine_oil_filter.interval' => 'required',
+                'dump.pre_fuel_filter.koefisien' => 'required',
+                'dump.pre_fuel_filter.interval' => 'required',
+                'dump.fuel_filter_element.koefisien' => 'required',
+                'dump.fuel_filter_element.interval' => 'required',
+                'dump.air_cleaner_inner.koefisien' => 'required',
+                'dump.air_cleaner_inner.interval' => 'required',
+                'dump.air_cleaner_outer.koefisien' => 'required',
+                'dump.air_cleaner_outer.interval' => 'required',
+                'dump.grase.harga_bulanan' => 'required',
+                'dump.grase.interval' => 'required',
+                'dump.tire_cost.koefisien' => 'required',
+                'dump.tire_cost.interval' => 'required',
+                'dump.gaji_operator.harga_bulanan' => 'required',
+                'dump.gaji_operator.interval' => 'required',
+            ]);
+            $koefisienBahanBakar = 70/100 * 0.2 * preg_replace('/,.*|[^0-9]/', '', $request->dump["bahan_bakar"]["harga_satuan"]) *  $request->dump["bahan_bakar"]["daya_mesin"];
+            $koefisienOilEngine = ($request->dump["oil_engine"]["faktor_efisien"]/195.5 + $request->dump["oil_engine"]["liter_pemakaian"]/250) * preg_replace('/,.*|[^0-9]/', '', $request->dump["oil_engine"]["harga_satuan"]);
+            $koefisienOilHidrolik = (1.2 *$request->dump["oil_hidrolik"]["daya_mesin"]/1250) * preg_replace('/,.*|[^0-9]/', '', $request->dump["oil_hidrolik"]["harga_satuan"]);
+          
+            $koefisienGrase = preg_replace('/,.*|[^0-9]/', '', $request->dump["grase"]["harga_bulanan"])/8;
+            $koefisienGajiOperator = preg_replace('/,.*|[^0-9]/', '', $request->dump["gaji_operator"]["harga_bulanan"])/240;
+            $parameter = [
+                'koefisienBahanBakar' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienBahanBakar,0))),3))),
+                'intervalBahanBakar' => $request->dump["bahan_bakar"]["interval"],
+                'koefisienOilEngine' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilEngine,0))),3))),
+                'intervalOilEngine' => $request->dump["oil_engine"]["interval"],
+                'koefisienOilHidrolik' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilHidrolik,0))),3))),
+                'intervalOilHidrolik' => $request->dump["oil_hidrolik"]["interval"],
+                'koefisienOilTransmisi' => $request->dump["oil_transmisi"]["koefisien"],
+                'intervalOilTransmisi' =>  $request->dump["oil_transmisi"]["interval"],
+                'koefisienOilPowerDteering' => $request->dump["oil_power_dteering"]["koefisien"],
+                'intervalOilPowerDteering' =>  $request->dump["oil_power_dteering"]["interval"],
+                'koefisienEngineOilFlter' => $request->dump["engine_oil_filter"]["koefisien"],
+                'intervalEngineOilFilter' => $request->dump["engine_oil_filter"]["interval"],
+                'koefisienPreFuelFilter' =>  $request->dump["pre_fuel_filter"]["koefisien"],
+                'intervalPreFuelFilter' => $request->dump["pre_fuel_filter"]["interval"],
+                'koefisienFuelFilter' =>  $request->dump["fuel_filter_element"]["koefisien"],
+                'intervalFuelFilter' => $request->dump["fuel_filter_element"]["interval"],
+                'koefisienAirCleanerInner' => $request->dump["air_cleaner_inner"]["koefisien"],
+                'intervalAirCleanerInner' => $request->dump["air_cleaner_inner"]["interval"],
+                'koefisienAirCleanerOuter' => $request->dump["air_cleaner_outer"]["koefisien"],
+                'intervalAirCleanerOuter' => $request->dump["air_cleaner_outer"]["interval"],
+                'koefisienGrase' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGrase,0))),3))),
+                'intervalGrase' => $request->dump["grase"]["interval"],
+                'koefisienTireCost' => $request->dump["tire_cost"]["koefisien"],
+                'intervalTireCost' => $request->dump["tire_cost"]["interval"],
+                'koefisienGajiOperator' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGajiOperator,0))),3))),
+                'intervalGajiOperator' => $request->dump["gaji_operator"]["interval"],
+            ];
+            $hasil = round($koefisienBahanBakar,0) + round($koefisienOilEngine,0) + round($koefisienOilHidrolik,0) + preg_replace('/,.*|[^0-9]/', '', $request->dump["oil_transmisi"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->dump["oil_power_dteering"]["koefisien"]) + preg_replace('/,.*|[^0-9]/', '', $request->dump["engine_oil_filter"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->dump["pre_fuel_filter"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->dump["fuel_filter_element"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->dump["air_cleaner_inner"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->dump["air_cleaner_outer"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->dump["tire_cost"]["koefisien"])+round($koefisienGrase,0)+round($koefisienGajiOperator,0);
+
+            $biayaOperasional = New BiayaOperasional;
+            $biayaOperasional->id_tipe_alat = $request->id_tipe_alat;
+            $biayaOperasional->hasil = $hasil;
+            $biayaOperasional->parameter = json_encode($parameter);
+            $biayaOperasional->save();
+        }else if($request->id_jenis_alat[1] == "Bulldozer"){
+            $request->validate([
+                'bulldozer.bahan_bakar.harga_satuan' => 'required',
+                'bulldozer.bahan_bakar.daya_mesin' => 'required',
+                'bulldozer.bahan_bakar.interval' => 'required',
+                'bulldozer.oil_engine.harga_satuan' => 'required',
+                'bulldozer.oil_engine.liter_pemakaian' => 'required',
+                'bulldozer.oil_engine.faktor_efisien' => 'required',
+                'bulldozer.oil_engine.interval' => 'required',
+                'bulldozer.oil_hidrolik.harga_satuan' => 'required',
+                'bulldozer.oil_hidrolik.daya_mesin' => 'required',
+                'bulldozer.oil_hidrolik.interval' => 'required',
+                'bulldozer.engine_oil_filter.koefisien' => 'required',
+                'bulldozer.engine_oil_filter.interval' => 'required',
+                'bulldozer.pre_fuel_filter.koefisien' => 'required',
+                'bulldozer.pre_fuel_filter.interval' => 'required',
+                'bulldozer.fuel_filter_element.harga_bulanan' => 'required',
+                'bulldozer.fuel_filter_element.interval' => 'required',
+                'bulldozer.air_cleaner_inner.koefisien' => 'required',
+                'bulldozer.air_cleaner_inner.interval' => 'required',
+                'bulldozer.air_cleaner_outer.koefisien' => 'required',
+                'bulldozer.air_cleaner_outer.interval' => 'required',
+                'bulldozer.grase.harga_bulanan' => 'required',
+                'bulldozer.grase.interval' => 'required',
+                'bulldozer.gaji_operator.harga_bulanan' => 'required',
+                'bulldozer.gaji_operator.interval' => 'required',
+            ]);
+            $koefisienBahanBakar = 70/100 * 0.2 * preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["bahan_bakar"]["harga_satuan"]) *  $request->bulldozer["bahan_bakar"]["daya_mesin"];
+            $koefisienOilEngine = ($request->bulldozer["oil_engine"]["faktor_efisien"]/195.5 + $request->bulldozer["oil_engine"]["liter_pemakaian"]/250) * preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["oil_engine"]["harga_satuan"]);
+            $koefisienOilHidrolik = (1.2 *$request->bulldozer["oil_hidrolik"]["daya_mesin"]/2000) * preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["oil_hidrolik"]["harga_satuan"]);
+          
+            $koefisienGrase = preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["grase"]["harga_bulanan"])/8;
+            $koefisienGajiOperator = preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["gaji_operator"]["harga_bulanan"])/240;
+            $parameter = [
+                'koefisienBahanBakar' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienBahanBakar,0))),3))),
+                'intervalBahanBakar' => $request->bulldozer["bahan_bakar"]["interval"],
+                'koefisienOilEngine' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilEngine,0))),3))),
+                'intervalOilEngine' => $request->bulldozer["oil_engine"]["interval"],
+                'koefisienOilHidrolik' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilHidrolik,0))),3))),
+                'intervalOilHidrolik' => $request->bulldozer["oil_hidrolik"]["interval"],
+                'koefisienEngineOilFlter' => $request->bulldozer["engine_oil_filter"]["koefisien"],
+                'intervalEngineOilFilter' => $request->bulldozer["engine_oil_filter"]["interval"],
+                'koefisienPreFuelFilter' =>  $request->bulldozer["pre_fuel_filter"]["koefisien"],
+                'intervalPreFuelFilter' => $request->bulldozer["pre_fuel_filter"]["interval"],
+                'koefisienFuelFilter' =>  $request->bulldozer["fuel_filter_element"]["koefisien"],
+                'intervalFuelFilter' => $request->bulldozer["fuel_filter_element"]["interval"],
+                'koefisienAirCleanerInner' => $request->bulldozer["air_cleaner_inner"]["koefisien"],
+                'intervalAirCleanerInner' => $request->bulldozer["air_cleaner_inner"]["interval"],
+                'koefisienAirCleanerOuter' => $request->bulldozer["air_cleaner_outer"]["koefisien"],
+                'intervalAirCleanerOuter' => $request->bulldozer["air_cleaner_outer"]["interval"],
+                'koefisienGrase' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGrase,0))),3))),
+                'intervalGrase' => $request->bulldozer["grase"]["interval"],
+                'koefisienGajiOperator' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGajiOperator,0))),3))),
+                'intervalGajiOperator' => $request->bulldozer["gaji_operator"]["interval"],
+            ];
+            $hasil = round($koefisienBahanBakar,0) + round($koefisienOilEngine,0) + round($koefisienOilHidrolik,0) 
+                     +preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["engine_oil_filter"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["pre_fuel_filter"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["fuel_filter_element"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["air_cleaner_inner"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->bulldozer["air_cleaner_outer"]["koefisien"])
+                     +round($koefisienGrase,0)+round($koefisienGajiOperator,0);
+
+            $biayaOperasional = New BiayaOperasional;
+            $biayaOperasional->id_tipe_alat = $request->id_tipe_alat;
+            $biayaOperasional->hasil = $hasil;
+            $biayaOperasional->parameter = json_encode($parameter);
+            $biayaOperasional->save();
+        }else{
+            $request->validate([
+                'compactor.bahan_bakar.harga_satuan' => 'required',
+                'compactor.bahan_bakar.daya_mesin' => 'required',
+                'compactor.bahan_bakar.interval' => 'required',
+                'compactor.oil_engine.harga_satuan' => 'required',
+                'compactor.oil_engine.liter_pemakaian' => 'required',
+                'compactor.oil_engine.faktor_efisien' => 'required',
+                'compactor.oil_engine.interval' => 'required',
+                'compactor.oil_hidrolik.harga_satuan' => 'required',
+                'compactor.oil_hidrolik.daya_mesin' => 'required',
+                'compactor.oil_hidrolik.interval' => 'required',
+                'compactor.engine_oil_filter.koefisien' => 'required',
+                'compactor.engine_oil_filter.interval' => 'required',
+                'compactor.fuel_filter_element.koefisien' => 'required',
+                'compactor.fuel_filter_element.interval' => 'required',
+                'compactor.fuel_water_separator.koefisien' => 'required',
+                'compactor.fuel_water_separator.interval' => 'required',
+                'compactor.fuel_filter.koefisien' => 'required',
+                'compactor.fuel_filter.interval' => 'required',
+                'compactor.hydraulic_filter.koefisien' => 'required',
+                'compactor.hydraulic_filter.interval' => 'required',
+                'compactor.air_cleaner_inner.koefisien' => 'required',
+                'compactor.air_cleaner_inner.interval' => 'required',
+                'compactor.air_cleaner_outer.koefisien' => 'required',
+                'compactor.air_cleaner_outer.interval' => 'required',
+                'compactor.grase.harga_bulanan' => 'required',
+                'compactor.grase.interval' => 'required',
+                'compactor.gaji_operator.harga_bulanan' => 'required',
+                'compactor.gaji_operator.interval' => 'required',
+            ]);
+
+            $koefisienBahanBakar = 70/100 * 0.2 * preg_replace('/,.*|[^0-9]/', '', $request->compactor["bahan_bakar"]["harga_satuan"]) *  $request->compactor["bahan_bakar"]["daya_mesin"];
+            $koefisienOilEngine = ($request->compactor["oil_engine"]["faktor_efisien"]/195.5 + $request->compactor["oil_engine"]["liter_pemakaian"]/250) * preg_replace('/,.*|[^0-9]/', '', $request->compactor["oil_engine"]["harga_satuan"]);
+            $koefisienOilHidrolik = (1.2 *$request->compactor["oil_hidrolik"]["daya_mesin"]/2000) * preg_replace('/,.*|[^0-9]/', '', $request->compactor["oil_hidrolik"]["harga_satuan"]);
+          
+            $koefisienGrase = preg_replace('/,.*|[^0-9]/', '', $request->compactor["grase"]["harga_bulanan"])/8;
+            $koefisienGajiOperator = preg_replace('/,.*|[^0-9]/', '', $request->compactor["gaji_operator"]["harga_bulanan"])/240;
+            $parameter = [
+                'koefisienBahanBakar' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienBahanBakar,0))),3))),
+                'intervalBahanBakar' => $request->compactor["bahan_bakar"]["interval"],
+                'koefisienOilEngine' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilEngine,0))),3))),
+                'intervalOilEngine' => $request->compactor["oil_engine"]["interval"],
+                'koefisienOilHidrolik' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienOilHidrolik,0))),3))),
+                'intervalOilHidrolik' => $request->compactor["oil_hidrolik"]["interval"],
+                'koefisienEngineOilFlter' => $request->compactor["engine_oil_filter"]["koefisien"],
+                'intervalEngineOilFilter' => $request->compactor["engine_oil_filter"]["interval"],
+                'koefisienFuelFilter' =>  $request->compactor["fuel_filter_element"]["koefisien"],
+                'intervalFuelFilter' => $request->compactor["fuel_filter_element"]["interval"],
+                'koefisienFuelWaterSeparator' =>  $request->compactor["fuel_water_separator"]["koefisien"],
+                'intervalFuelWaterSeparator' => $request->compactor["fuel_water_separator"]["interval"],
+                'koefisienFuelFilter' =>  $request->compactor["fuel_filter"]["koefisien"],
+                'intervalFuelFilter' => $request->compactor["fuel_filter"]["interval"],
+                'koefisienHydraulicFilter' =>  $request->compactor["hydraulic_filter"]["koefisien"],
+                'intervalHydraulicFilter' => $request->compactor["hydraulic_filter"]["interval"],
+                'koefisienAirCleanerInner' => $request->compactor["air_cleaner_inner"]["koefisien"],
+                'intervalAirCleanerInner' => $request->compactor["air_cleaner_inner"]["interval"],
+                'koefisienAirCleanerOuter' => $request->compactor["air_cleaner_outer"]["koefisien"],
+                'intervalAirCleanerOuter' => $request->compactor["air_cleaner_outer"]["interval"],
+                'koefisienGrase' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGrase,0))),3))),
+                'intervalGrase' => $request->compactor["grase"]["interval"],
+                'koefisienGajiOperator' => 'Rp. '.strrev(implode('.',str_split(strrev(strval(round($koefisienGajiOperator,0))),3))),
+                'intervalGajiOperator' => $request->compactor["gaji_operator"]["interval"],
+            ];
+            $hasil = round($koefisienBahanBakar,0) + round($koefisienOilEngine,0) + round($koefisienOilHidrolik,0) + preg_replace('/,.*|[^0-9]/', '', $request->compactor["engine_oil_filter"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->compactor["fuel_filter_element"]["koefisien"]) + preg_replace('/,.*|[^0-9]/', '', $request->compactor["fuel_water_separator"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->compactor["fuel_filter"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->compactor["hydraulic_filter"]["koefisien"])
+                     +preg_replace('/,.*|[^0-9]/', '', $request->compactor["air_cleaner_inner"]["koefisien"])+preg_replace('/,.*|[^0-9]/', '', $request->compactor["air_cleaner_outer"]["koefisien"])
+                     +round($koefisienGrase,0)+round($koefisienGajiOperator,0);
+
+            $biayaOperasional = New BiayaOperasional;
+            $biayaOperasional->id_tipe_alat = $request->id_tipe_alat;
+            $biayaOperasional->hasil = $hasil;
+            $biayaOperasional->parameter = json_encode($parameter);
+            $biayaOperasional->save();
+        }
     }
-
+    
     public function update(Request $request, $id)
     {
 
@@ -51,6 +334,6 @@ class BiayaOperasionalController extends Controller
 
     public function destroy($id)
     {
-       return BIayaOperasional::find($id)->delete();
+       return BiayaOperasional::find($id)->delete();
     }
 }
