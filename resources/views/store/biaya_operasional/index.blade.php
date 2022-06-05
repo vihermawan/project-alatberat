@@ -79,7 +79,7 @@ Biaya Operasional
               <tbody>
                 <tr v-for="item, index in mainData" :key="index">
                   <td>@{{ index+1 }}</td>
-                  <td>@{{ item.email}}</td>
+                  <td>@{{ item.nama_tipe_alat}}</td>
                   <td>@{{ item.email}}</td>
                   <td>@{{ item.email}}</td>
                   <td>@{{ item.email}}</td>
@@ -619,8 +619,22 @@ Biaya Operasional
       refreshData() {
         axios.get("{{ route('biayaOperasional.list') }}")
         .then(response => {
+          if (response.data.length !== 0){
+            let array = []
+            for(let data of response.data){
+              let params = JSON.parse(data.parameter)
+              let parameter = ""
+              if(data.nama_jenis_alat === "Dump Truck"){
+                
+              }
+              console.log('response',data)
+              array.push(data) 
+            }
+            this.mainData = array
+          }else{
+            this.mainData = []
+          }
           $('#table').DataTable().destroy()
-          this.mainData = response.data
           this.$nextTick(function () {
               $('#table').DataTable();
           })

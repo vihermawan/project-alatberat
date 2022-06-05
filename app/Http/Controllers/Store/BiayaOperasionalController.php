@@ -21,8 +21,9 @@ class BiayaOperasionalController extends Controller
     }
 
     public function listBiayaOperasional(){
-        $allBiayaOperasional = BiayaOperasional::select('biaya_operasional.*','tipe_alat.nama as nama_tipe_alat','tipe_alat.id as id_tipe_alat')
+        $allBiayaOperasional = BiayaOperasional::select('biaya_operasional.*','tipe_alat.nama as nama_tipe_alat','tipe_alat.id as id_tipe_alat','jenis_alat.nama as nama_jenis_alat')
                             ->join('tipe_alat', 'biaya_operasional.id_tipe_alat', '=', 'tipe_alat.id')
+                            ->join('jenis_alat', 'tipe_alat.id_jenis_alat', '=', 'jenis_alat.id')
                             ->get();
         return $allBiayaOperasional;
     }
